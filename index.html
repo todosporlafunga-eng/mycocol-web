@@ -487,7 +487,10 @@
 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const supabase = window.supabase.createClient(
+if (!window.__mycocolInit) {
+window.__mycocolInit = true;
+(function(){
+  const sbClient = window.supabase.createClient(
     "https://bsjdvgjgvrgdrgoziatj.supabase.co",
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzamR2Z2pndnJnZHJnb3ppYXRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3NjI3NTAsImV4cCI6MjA5ODMzODc1MH0.Grqy48k0BbLtZO0jMKJ86s8bIGQbRpf4k6y22T7TP2k"
   );
@@ -518,7 +521,7 @@
   async function cargarFeed(){
     const grid = document.getElementById('feed-grid');
     try {
-      const { data, error } = await supabase
+      const { data, error } = await sbClient
         .from('observaciones')
         .select('id, foto_url, prediccion_top1, confianza_prediccion, created_at')
         .eq('validada', true)
@@ -574,6 +577,8 @@
     }, { threshold: 0.15 });
     elementos.forEach(el => observador.observe(el));
   }
+})();
+}
 </script>
 
 </body>
