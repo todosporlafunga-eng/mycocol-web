@@ -386,6 +386,19 @@
   .resultado-barra-fill{height:100%; border-radius:100px; background:var(--verde-marca); transition:width .3s ease;}
   #resultado-confianza-txt{font-size:13.5px; font-weight:600; color:var(--tinta-suave); white-space:nowrap;}
 
+  .ficha-especie{
+    margin-top:18px; border-top:1px solid var(--piedra-linea); padding-top:16px;
+  }
+  .ficha-titulo{font-size:12px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--verde-marca); margin-bottom:10px;}
+  .ficha-filas{display:grid; grid-template-columns:auto 1fr; gap:7px 14px; margin:0;}
+  .ficha-filas dt{font-size:13px; color:var(--piedra); white-space:nowrap;}
+  .ficha-filas dd{font-size:13.5px; color:var(--tinta); margin:0;}
+  .ficha-etiqueta{
+    display:inline-block; font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:100px;
+    background:var(--musgo-tenue); color:var(--verde-marca); margin:0 6px 4px 0;
+  }
+  .ficha-descripcion{font-size:14px; line-height:1.6; color:var(--tinta-suave); margin:14px 0 0; padding-top:14px; border-top:1px solid var(--piedra-linea);}
+
   /* ---------- Límite diario / login ---------- */
   .feed-item.bloqueada{position:relative;}
   .feed-item.bloqueada .foto img{filter:blur(6px); transform:scale(1.08);}
@@ -604,6 +617,13 @@
         </div>
 
         <p class="modal-nota" id="resultado-nombre" style="margin-top:16px;"></p>
+
+        <div id="ficha-especie" class="ficha-especie" hidden>
+          <div class="ficha-titulo">Ficha de la especie</div>
+          <dl id="ficha-filas" class="ficha-filas"></dl>
+          <p id="ficha-descripcion" class="ficha-descripcion" hidden></p>
+        </div>
+
         <button class="btn btn-primario" id="btn-cerrar-resultado" style="width:100%; margin-top:14px;">Identificar otro</button>
       </div>
     </div>
@@ -1378,11 +1398,74 @@ window.__mycocolInit = true;
 
         document.getElementById('resultado-nombre').textContent =
           `Registrado como "${nombre}" — tu observación quedó pendiente de validación por un experto antes de aparecer en el mapa público.`;
+
+        mostrarFichaEspecie(nombreCientifico);
       } catch (err) {
         pasoCargando.hidden = true;
         pasoForm.hidden = false;
         errorBox.textContent = err.message || 'Ocurrió un error inesperado. Intenta de nuevo.';
         errorBox.hidden = false;
+      }
+    }
+
+    async function mostrarFichaEspecie(nombreCientifico){
+      const caja = document.getElementById('ficha-especie');
+      const filas = document.getElementById('ficha-filas');
+      const descripcionEl = document.getElementById('ficha-descripcion');
+      caja.hidden = true;
+      filas.innerHTML = '';
+      descripcionEl.hidden = true;
+
+      try {
+        const { data: e, error } = await sbClient
+          .from('especies')
+          .select('nombre_comun, familia, genero, forma_sombrero, color_sombrero, tipo_laminas, color_laminas, tipo_pie, diametro_cm, habitat, sustrato, altitud_m, distribucion, tiene_anillo, tiene_volva, color_esporas, brilla_oscuridad, olor, uso_medicinal, descripcion_completa')
+          .ilike('nombre_cientifico', nombreCientifico)
+          .maybeSingle();
+
+        if (error || !e) return; // sin ficha disponible, no pasa nada — el resultado principal ya se ve
+
+        const agregar = (etiqueta, valor) => {
+          if (valor === null || valor === undefined || valor === '') return;
+          const dt = document.createElement('dt'); dt.textContent = etiqueta;
+          const dd = document.createElement('dd'); dd.textContent = valor;
+          filas.appendChild(dt); filas.appendChild(dd);
+        };
+
+        agregar('Familia', [e.familia, e.genero].filter(Boolean).join(' · '));
+        agregar('Sombrero', [e.forma_sombrero, e.color_sombrero].filter(Boolean).join(', '));
+        agregar('Láminas', [e.tipo_laminas, e.color_laminas].filter(Boolean).join(', '));
+        agregar('Pie', e.tipo_pie);
+        agregar('Tamaño', e.diametro_cm ? `${e.diametro_cm} cm de diámetro` : null);
+        agregar('Hábitat', [e.habitat, e.sustrato].filter(Boolean).join(' · '));
+        agregar('Altitud', e.altitud_m ? `${e.altitud_m} msnm` : null);
+        agregar('Distribución', e.distribucion);
+        agregar('Esporas', e.color_esporas);
+        agregar('Olor', e.olor);
+        agregar('Uso medicinal', e.uso_medicinal);
+
+        // Etiquetas destacadas (anillo, volva, bioluminiscencia) como chips en vez de fila
+        const chips = [];
+        if (e.tiene_anillo) chips.push('Tiene anillo');
+        if (e.tiene_volva) chips.push('Tiene volva');
+        if (e.brilla_oscuridad) chips.push('Bioluminiscente');
+        if (chips.length) {
+          const dt = document.createElement('dt'); dt.textContent = '';
+          const dd = document.createElement('dd');
+          dd.innerHTML = chips.map(c => `<span class="ficha-etiqueta">${c}</span>`).join('');
+          filas.appendChild(dt); filas.appendChild(dd);
+        }
+
+        if (e.descripcion_completa) {
+          descripcionEl.textContent = e.descripcion_completa;
+          descripcionEl.hidden = false;
+        }
+
+        if (filas.children.length > 0 || !descripcionEl.hidden) {
+          caja.hidden = false;
+        }
+      } catch (err) {
+        console.error('[Mycocol] no se pudo cargar la ficha de especie:', err);
       }
     }
   }
