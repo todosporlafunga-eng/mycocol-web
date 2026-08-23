@@ -27,43 +27,71 @@
 
 <style>
   :root{
-    --verde-profundo:#1B4332;
-    --verde-marca:#2D6A4F;
-    --verde-marca-hover:#255a42;
-    --verde-musgo:#74C69D;
-    --verde-musgo-tenue:#DCEEE4;
-    --crema-papel:#F5F2E7;
-    --crema-tarjeta:#FFFDF8;
-    --tinta:#1B1B1B;
-    --tinta-suave:#3F3B33;
-    --piedra:#6B6459;
-    --piedra-linea:#E2DCCC;
-    --ambar-tierra:#9A5B23;
-    --ambar-fondo:#F3E6D3;
-    --sombra: 0 12px 32px rgba(27,67,50,0.10);
-    --radio: 18px;
+    --bosque:#101d17;
+    --superficie:#182720;
+    --tarjeta:#1c2f26;
+    --tarjeta-hover:#22392c;
+    --primario:#4ADE9E;
+    --primario-hover:#3BC98B;
+    --primario-oscuro:#0B2318;
+    --musgo-tenue:rgba(74,222,158,0.10);
+    --texto:#F1F5F0;
+    --texto-suave:#AEC6B4;
+    --piedra:#7E9686;
+    --borde:rgba(241,245,240,0.10);
+    --ambar:#E3A64E;
+    --ambar-fondo:rgba(227,166,78,0.08);
+    --peligro:#E2604A;
+    --peligro-fondo:rgba(226,96,74,0.08);
+
+    /* alias de compatibilidad con nombres usados en el resto del CSS */
+    --verde-marca:var(--primario);
+    --verde-marca-hover:var(--primario-hover);
+    --verde-musgo:var(--primario);
+    --verde-musgo-tenue:var(--musgo-tenue);
+    --verde-profundo:var(--texto);
+    --panel-solido:var(--primario-oscuro);
+    --crema-papel:var(--bosque);
+    --crema-tarjeta:var(--tarjeta);
+    --tinta:var(--texto);
+    --tinta-suave:var(--texto-suave);
+    --piedra-linea:var(--borde);
+    --ambar-tierra:var(--ambar);
+    --ambar-fondo:var(--ambar-fondo);
+    --fondo:var(--superficie);
+
+    --sombra: 0 20px 50px -20px rgba(0,0,0,0.55);
+    --radio: 20px;
   }
 
   *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth; overflow-x:hidden;}
   body{
     margin:0;
     background:var(--crema-papel);
     color:var(--tinta);
     font-family:'Roboto',system-ui,sans-serif;
-    line-height:1.55;
+    font-size:17px;
+    line-height:1.6;
     -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    max-width:100vw;
   }
   img{max-width:100%;display:block;}
   a{color:inherit;}
   .contenedor{max-width:1120px;margin:0 auto;padding:0 28px;}
 
-  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;color:var(--verde-profundo);margin:0;line-height:1.12;letter-spacing:-0.01em;}
+  html, body, button, input, textarea, select{letter-spacing:normal;}
+
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;color:var(--verde-profundo);margin:0;line-height:1.12;letter-spacing:-0.02em;text-wrap:balance;}
+  @media (max-width:640px){ h1,h2,h3{letter-spacing:-0.012em;} }
+  p,li{letter-spacing:0; line-height:1.6;}
+  button,.btn,a{letter-spacing:0;}
   .cientifico{font-style:italic;font-family:'Fraunces',serif;font-weight:500;}
   .eyebrow{
     font-family:'Roboto Mono',monospace;
-    font-size:12.5px;
-    letter-spacing:0.14em;
+    font-size:13px;
+    letter-spacing:0.07em;
     text-transform:uppercase;
     color:var(--verde-marca);
     font-weight:500;
@@ -72,42 +100,43 @@
   /* ---------- NAV ---------- */
   header.nav{
     position:sticky; top:0; z-index:50;
-    background:rgba(245,242,231,0.88);
+    background:rgba(16,29,23,0.82);
     backdrop-filter:blur(10px);
     border-bottom:1px solid var(--piedra-linea);
   }
   .nav-fila{
-    display:flex; align-items:center; justify-content:space-between;
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
     padding:16px 28px; max-width:1120px; margin:0 auto;
   }
   .logo{
-    display:flex; align-items:center; gap:10px;
+    display:flex; align-items:center; gap:10px; flex-shrink:0;
     font-family:'Fraunces',serif; font-weight:600; font-size:20px; color:var(--verde-profundo);
     text-decoration:none;
   }
   .logo-icono{width:28px;height:28px;flex-shrink:0;}
-  nav.links{display:flex; gap:30px; align-items:center;}
+  nav.links{display:flex; gap:22px; align-items:center; flex-shrink:0;}
   nav.links a{
-    text-decoration:none; color:var(--tinta-suave); font-size:14.5px; font-weight:500;
+    text-decoration:none; color:var(--tinta-suave); font-size:15.5px; font-weight:500; white-space:nowrap;
   }
   nav.links a:hover{color:var(--verde-marca);}
   .btn{
-    display:inline-flex; align-items:center; justify-content:center; gap:8px;
-    padding:12px 22px; border-radius:100px; font-weight:700; font-size:14.5px;
+    display:inline-flex; align-items:center; justify-content:center; gap:8px; white-space:nowrap;
+    padding:13px 24px; border-radius:100px; font-weight:700; font-size:15.5px;
     text-decoration:none; border:none; cursor:pointer; transition:transform .15s ease, box-shadow .15s ease;
   }
   .btn-primario{background:var(--verde-marca); color:#fff;}
   .btn-primario:hover{background:var(--verde-marca-hover); transform:translateY(-1px);}
-  .btn-fantasma{background:transparent; color:var(--verde-profundo); border:1.5px solid var(--verde-profundo);}
-  .btn-fantasma:hover{background:var(--verde-profundo); color:#fff;}
+  .btn-fantasma{background:transparent; color:var(--verde-marca); border:1.5px solid var(--verde-marca);}
+  .btn-fantasma:hover{background:var(--verde-marca); color:var(--primario-oscuro);}
   .nav-mobile-hide{display:flex;}
-  @media (max-width:800px){ .nav-mobile-hide{display:none;} }
+  @media (max-width:900px){ .nav-mobile-hide{display:none;} }
+  .nav-grupo-login{align-items:center; gap:12px;}
   .nav-burger{
     display:none; width:40px; height:40px; border-radius:10px; background:transparent; border:1px solid var(--piedra-linea);
     cursor:pointer; align-items:center; justify-content:center; flex-direction:column; gap:5px; flex-shrink:0;
   }
   .nav-burger span{display:block; width:18px; height:2px; background:var(--verde-profundo); border-radius:2px; transition:transform .2s ease, opacity .2s ease;}
-  @media (max-width:800px){ .nav-burger{display:flex;} }
+  @media (max-width:900px){ .nav-burger{display:flex;} }
   .nav-movil{
     display:none; flex-direction:column; gap:2px;
     max-width:1120px; margin:0 auto; padding:0 28px 18px;
@@ -128,9 +157,10 @@
     padding:76px 0 60px;
     display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center;
   }
+  .hero > *{min-width:0;}
   @media (max-width:900px){ .hero{grid-template-columns:1fr; padding:44px 0 40px;} }
-  .hero h1{font-size:clamp(34px,4.6vw,54px); margin:14px 0 20px;}
-  .hero p.sub{font-size:18px; color:var(--tinta-suave); max-width:490px; margin:0 0 30px;}
+  .hero h1{font-size:clamp(36px,4.8vw,58px); margin:14px 0 20px;}
+  .hero p.sub{font-size:19px; color:var(--tinta-suave); max-width:490px; margin:0 0 30px;}
   .hero-ctas{display:flex; gap:14px; flex-wrap:wrap;}
 
   /* tarjeta "en vivo" del hero, calcada del componente real de la app */
@@ -162,6 +192,31 @@
   .punto-vivo{width:7px;height:7px;border-radius:50%;background:var(--verde-marca); animation:latido 1.6s ease-in-out infinite;}
   @keyframes latido{0%,100%{opacity:1; transform:scale(1);} 50%{opacity:.45; transform:scale(0.8);}}
 
+  @keyframes derivar{
+    0%{transform:translateY(0) translateX(0); opacity:0;}
+    10%{opacity:var(--spore-opacity,0.5);}
+    90%{opacity:var(--spore-opacity,0.5);}
+    100%{transform:translateY(-120vh) translateX(var(--spore-drift,20px)); opacity:0;}
+  }
+  @keyframes respirar{
+    0%,100%{opacity:0.55; transform:scale(1);}
+    50%{opacity:0.9; transform:scale(1.06);}
+  }
+  .hero-halo{
+    pointer-events:none; position:absolute; top:-160px; left:50%; transform:translateX(-50%);
+    width:820px; height:520px; max-width:130vw; border-radius:50%;
+    background:var(--primario); opacity:0.12; filter:blur(120px);
+    animation:respirar 6s ease-in-out infinite;
+  }
+  .spore-field{pointer-events:none; position:absolute; inset:0; overflow:hidden;}
+  .spore-field span{
+    position:absolute; bottom:-10px; border-radius:50%; background:var(--primario); filter:blur(0.5px);
+    animation-name:derivar; animation-timing-function:linear; animation-iteration-count:infinite;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .hero-halo,.spore-field span,.punto-vivo{animation:none;}
+  }
+
   /* ---------- Spinner de marca (recreación del widget de Flutter) ---------- */
   .spinner-hongo{position:relative; width:64px; height:64px;}
   .spinner-hongo svg{position:absolute; inset:0; animation:girar 1.1s linear infinite;}
@@ -174,9 +229,9 @@
   /* ---------- Secciones genéricas ---------- */
   section{padding:96px 0;}
   .section-cabecera{max-width:620px; margin:0 0 52px;}
-  .section-cabecera h2{font-size:clamp(28px,3.2vw,38px); margin:10px 0 14px;}
-  .section-cabecera p{font-size:16.5px; color:var(--tinta-suave); margin:0;}
-  .section-oscura{background:var(--verde-profundo); color:#fff; padding:64px 44px;}
+  .section-cabecera h2{font-size:clamp(30px,3.4vw,40px); margin:10px 0 14px;}
+  .section-cabecera p{font-size:17.5px; color:var(--tinta-suave); margin:0;}
+  .section-oscura{background:var(--panel-solido); color:#fff; padding:64px 44px;}
   .section-oscura .section-cabecera h2, .section-oscura h3{color:#fff;}
   .section-oscura .eyebrow{color:var(--verde-musgo);}
   .section-oscura .section-cabecera p{color:#D9E6DE;}
@@ -187,13 +242,15 @@
   @media (max-width:820px){ .pasos{grid-template-columns:1fr;} }
   .paso{
     background:var(--crema-tarjeta); border:1px solid var(--piedra-linea); border-radius:var(--radio);
-    padding:30px 26px; position:relative;
+    position:relative; overflow:hidden;
   }
+  .paso .foto-paso{width:100%; aspect-ratio:1.45; object-fit:cover; display:block; background:var(--tarjeta-hover);}
+  .paso-cuerpo{padding:24px 26px 28px;}
   .paso .num{font-family:'Roboto Mono',monospace; font-size:13px; color:var(--verde-musgo); font-weight:500; letter-spacing:.08em;}
-  .paso h3{font-size:21px; margin:10px 0 10px;}
-  .paso p{margin:0; color:var(--tinta-suave); font-size:15px;}
+  .paso h3{font-size:22px; margin:10px 0 10px;}
+  .paso p{margin:0; color:var(--tinta-suave); font-size:16px;}
   .paso .linea{
-    position:absolute; top:44px; right:-28px; width:28px; height:2px; background:var(--piedra-linea);
+    position:absolute; top:50%; right:-28px; width:28px; height:2px; background:var(--piedra-linea); transform:translateY(-50%);
   }
   @media (max-width:820px){ .paso .linea{display:none;} }
 
@@ -209,16 +266,16 @@
     background:var(--crema-tarjeta); border:1px solid var(--piedra-linea); border-radius:14px; overflow:hidden;
   }
   @media (max-width:560px){ .feed-item{flex-basis:74vw;} }
-  .feed-item .foto{aspect-ratio:1; background:linear-gradient(135deg,var(--verde-musgo-tenue),#e3ded0); position:relative;}
+  .feed-item .foto{aspect-ratio:1; background:linear-gradient(135deg,var(--verde-musgo-tenue),var(--tarjeta-hover)); position:relative;}
   .feed-item .foto img{width:100%;height:100%;object-fit:cover;}
   .feed-item .info{padding:12px 14px 14px;}
-  .feed-item .especie{font-size:14.5px; margin-bottom:2px;}
-  .feed-item .conf{font-size:12px; color:var(--piedra);}
+  .feed-item .especie{font-size:15.5px; margin-bottom:2px;}
+  .feed-item .conf{font-size:13px; color:var(--piedra);}
   .feed-flecha{
     position:absolute; top:calc(50% - 14px); transform:translateY(-50%);
-    width:42px; height:42px; border-radius:50%; background:#fff; border:1px solid var(--piedra-linea);
+    width:42px; height:42px; border-radius:50%; background:var(--crema-tarjeta); border:1px solid var(--piedra-linea);
     display:flex; align-items:center; justify-content:center; cursor:pointer;
-    box-shadow:0 4px 14px rgba(0,0,0,.08); z-index:2; color:var(--verde-profundo); font-size:20px;
+    box-shadow:0 4px 14px rgba(0,0,0,.3); z-index:2; color:var(--verde-marca); font-size:20px;
   }
   .feed-flecha:hover{background:var(--verde-musgo-tenue);}
   .feed-flecha.izq{left:-10px;}
@@ -232,13 +289,13 @@
 
   /* ---------- Seguridad ---------- */
   .seguridad-caja{
-    background:var(--ambar-fondo); border:1px solid #e3c79a; border-radius:var(--radio);
+    background:var(--ambar-fondo); border:1px solid rgba(227,166,78,0.35); border-radius:var(--radio);
     padding:38px 40px; display:grid; grid-template-columns:auto 1fr; gap:26px; align-items:flex-start;
   }
   @media (max-width:700px){ .seguridad-caja{grid-template-columns:1fr; padding:28px;} }
   .seguridad-caja .icono{color:var(--ambar-tierra);}
   .seguridad-caja h3{color:var(--ambar-tierra); font-size:22px; margin-bottom:10px;}
-  .seguridad-caja p{margin:0 0 8px; color:#5c4526; font-size:15.5px;}
+  .seguridad-caja p{margin:0 0 8px; color:var(--tinta-suave); font-size:15.5px;}
   .seguridad-caja p:last-child{margin-bottom:0;}
 
   /* ---------- Comunidad ---------- */
@@ -254,7 +311,7 @@
   }
   .stat-item:hover{background:rgba(255,255,255,0.09); border-color:rgba(255,255,255,0.22);}
   .stat-item .valor{font-family:'Fraunces',serif; font-weight:600; font-size:clamp(26px,4vw,34px); color:var(--verde-musgo); line-height:1;}
-  .stat-item .label{font-size:12.5px; color:#cfe0d6; line-height:1.35; max-width:120px;}
+  .stat-item .label{font-size:13.5px; color:#cfe0d6; line-height:1.35; max-width:120px;}
 
   .insignias-fila{display:flex; gap:16px; flex-wrap:wrap; margin-top:36px;}
   .insignia{
@@ -276,7 +333,7 @@
   .mapa-caja .contenido{max-width:360px; padding:30px;}
   .mapa-caja .badge-proximamente{
     display:inline-block; font-family:'Roboto Mono',monospace; font-size:11.5px; letter-spacing:.08em;
-    text-transform:uppercase; background:var(--verde-profundo); color:#fff; padding:6px 14px; border-radius:100px;
+    text-transform:uppercase; background:var(--panel-solido); color:#fff; padding:6px 14px; border-radius:100px;
     margin-bottom:14px;
   }
   .pin-mapa{position:absolute; width:14px;height:14px;border-radius:50% 50% 50% 0; background:var(--verde-marca); transform:rotate(-45deg);}
@@ -293,7 +350,7 @@
     position:relative; max-height:90vh; overflow-y:auto;
   }
   .modal-caja h3{margin:0 0 8px; font-size:22px;}
-  .modal-sub{color:var(--tinta-suave); font-size:14px; margin:0 0 20px;}
+  .modal-sub{color:var(--tinta-suave); font-size:15px; margin:0 0 20px;}
   .modal-cerrar{
     position:absolute; top:16px; right:16px; background:none; border:none; font-size:18px; cursor:pointer;
     color:var(--tinta-suave); width:32px; height:32px; border-radius:50%;
@@ -307,8 +364,8 @@
   .campo-foto:hover{border-color:var(--verde-marca);}
   .campo-foto input{display:none;}
   .campo-foto.con-foto{border-style:solid; border-color:var(--verde-marca); color:var(--verde-profundo); font-weight:500;}
-  .modal-nota{font-size:12.5px; color:var(--piedra); margin:6px 0 18px;}
-  .modal-error{font-size:13px; color:#B3261E; background:#FBEAE9; padding:10px 12px; border-radius:10px; margin-bottom:14px;}
+  .modal-nota{font-size:13.5px; color:var(--piedra); margin:6px 0 18px;}
+  .modal-error{font-size:13px; color:var(--peligro); background:var(--peligro-fondo); border:1px solid rgba(226,96,74,0.3); padding:10px 12px; border-radius:10px; margin-bottom:14px;}
   .identificar-inline{
     margin:0 auto; width:100%; max-width:560px;
     background:var(--crema-tarjeta); border:1.5px solid var(--piedra-linea); border-radius:28px;
@@ -320,14 +377,14 @@
     background:rgba(45,106,79,0.12); color:var(--verde-marca);
   }
   .resultado-alerta{
-    background:rgba(179,38,30,0.08); border:1.5px solid #B3261E; border-radius:12px; padding:14px; margin-bottom:12px;
+    background:var(--peligro-fondo); border:1.5px solid rgba(226,96,74,0.4); border-radius:12px; padding:14px; margin-bottom:12px;
   }
-  .resultado-alerta strong{color:#B3261E; font-size:13.5px;}
+  .resultado-alerta strong{color:var(--peligro); font-size:13.5px;}
   .resultado-alerta p{margin:6px 0 0; font-size:13px; color:var(--tinta-suave);}
   .resultado-barra-wrap{display:flex; align-items:center; gap:10px; margin-top:14px;}
   .resultado-barra-fondo{flex:1; height:8px; border-radius:100px; background:var(--piedra-linea); overflow:hidden;}
   .resultado-barra-fill{height:100%; border-radius:100px; background:var(--verde-marca); transition:width .3s ease;}
-  #resultado-confianza-txt{font-size:12.5px; font-weight:600; color:var(--tinta-suave); white-space:nowrap;}
+  #resultado-confianza-txt{font-size:13.5px; font-weight:600; color:var(--tinta-suave); white-space:nowrap;}
 
   /* ---------- Límite diario / login ---------- */
   .feed-item.bloqueada{position:relative;}
@@ -338,10 +395,10 @@
   }
   .feed-item .candado-overlay .btn{pointer-events:none; padding:9px 16px; font-size:13px;}
   .nav-login-btn{
-    background:transparent; border:1.5px solid var(--verde-profundo); color:var(--verde-profundo);
-    border-radius:100px; padding:10px 18px; font-size:14px; font-weight:600; cursor:pointer;
+    background:transparent; border:1.5px solid var(--verde-marca); color:var(--verde-marca);
+    border-radius:100px; padding:11px 20px; font-size:15px; font-weight:600; cursor:pointer; white-space:nowrap;
   }
-  .nav-login-btn:hover{background:var(--verde-profundo); color:#fff;}
+  .nav-login-btn:hover{background:var(--verde-marca); color:var(--primario-oscuro);}
   .modal-tabs{display:flex; gap:8px; margin-bottom:18px;}
   .modal-tab{
     flex:1; text-align:center; padding:10px; border-radius:10px; border:1.5px solid var(--piedra-linea);
@@ -350,8 +407,9 @@
   .modal-tab.activo{background:var(--verde-marca); border-color:var(--verde-marca); color:#fff;}
   .campo-texto{
     width:100%; padding:12px 14px; border:1.5px solid var(--piedra-linea); border-radius:10px;
-    font-size:14px; margin-bottom:12px; font-family:inherit;
+    font-size:14px; margin-bottom:12px; font-family:inherit; background:var(--fondo); color:var(--tinta);
   }
+  .campo-texto::placeholder{color:var(--piedra);}
   .campo-texto:focus{outline:none; border-color:var(--verde-marca);}
   .paso-indicador{display:flex; align-items:center; justify-content:center; margin-bottom:28px;}
   .paso-punto{
@@ -361,7 +419,7 @@
   }
   .paso-linea{width:44px; height:2px; background:var(--piedra-linea); flex-shrink:0;}
   .paso-punto.activo{background:var(--verde-marca); color:#fff;}
-  .paso-punto.completo{background:var(--verde-profundo); color:#fff;}
+  .paso-punto.completo{background:var(--panel-solido); color:#fff;}
   .paso-icono{
     display:inline-flex; align-items:center; justify-content:center; width:68px; height:68px; border-radius:50%;
     background:var(--verde-musgo-tenue); font-size:30px;
@@ -394,8 +452,8 @@
     border:1px solid rgba(255,255,255,0.3); border-radius:12px; padding:11px 18px; text-decoration:none; color:#fff;
   }
   .badge-tienda .txt{text-align:left; line-height:1.15;}
-  .badge-tienda .txt small{display:block; font-size:10.5px; opacity:.8;}
-  .badge-tienda .txt strong{font-size:14.5px;}
+  .badge-tienda .txt small{display:block; font-size:11.5px; opacity:.8;}
+  .badge-tienda .txt strong{font-size:15.5px;}
 
   /* ---------- Footer ---------- */
   footer{padding:50px 0 36px; border-top:1px solid var(--piedra-linea);}
@@ -416,8 +474,8 @@
   <div class="nav-fila">
     <a href="#" class="logo">
       <svg class="logo-icono" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M16 4C9 4 5 9 5 13.5C5 15 6 16 7.5 16H24.5C26 16 27 15 27 13.5C27 9 23 4 16 4Z" fill="#2D6A4F"/>
-        <rect x="13.5" y="16" width="5" height="12" rx="2.2" fill="#2D6A4F"/>
+        <path d="M16 4C9 4 5 9 5 13.5C5 15 6 16 7.5 16H24.5C26 16 27 15 27 13.5C27 9 23 4 16 4Z" fill="#4ADE9E"/>
+        <rect x="13.5" y="16" width="5" height="12" rx="2.2" fill="#4ADE9E"/>
       </svg>
       mycocol
     </a>
@@ -427,7 +485,7 @@
       <a href="#comunidad">Comunidad</a>
       <a href="#seguridad">Seguridad</a>
     </nav>
-    <div class="nav-mobile-hide" style="display:flex; align-items:center; gap:12px;">
+    <div class="nav-mobile-hide nav-grupo-login">
       <button class="nav-login-btn" id="btn-nav-login">Iniciar sesión</button>
       <a href="https://github.com/todosporlafunga-eng/mycocol-web/releases/download/v0.1.0-beta/mycocol.apk" class="btn btn-primario">Descargar app</a>
     </div>
@@ -448,8 +506,10 @@
 <div class="contenedor">
 
   <!-- HERO -->
-  <section class="hero" style="padding-bottom:64px;">
-    <div class="reveal visible">
+  <section class="hero" style="padding-bottom:64px; position:relative; overflow:hidden;">
+    <div class="hero-halo" aria-hidden="true"></div>
+    <div class="spore-field" id="spore-field" aria-hidden="true"></div>
+    <div class="reveal visible" style="position:relative;">
       <span class="eyebrow">Boyacá, Colombia</span>
       <h1>Identifica hongos silvestres con ayuda de la IA <span class="cientifico">y de tu comunidad</span></h1>
       <p class="sub">Mycocol combina un modelo de inteligencia artificial entrenado en 265 especies con validadores expertos reales — para que ninguna identificación quede solo en manos de un algoritmo.</p>
@@ -559,21 +619,30 @@
     </div>
     <div class="pasos">
       <div class="paso reveal">
-        <span class="num">01</span>
-        <div class="linea"></div>
-        <h3>Tomas la foto</h3>
-        <p>La app te guía para capturar varios ángulos — sombrero, láminas, base — porque una sola foto casi nunca es suficiente para identificar bien un hongo.</p>
+        <img class="foto-paso" src="img/paso-01-foto.webp" alt="Hongo silvestre fotografiado de cerca en su hábitat natural">
+        <div class="paso-cuerpo">
+          <span class="num">01</span>
+          <div class="linea"></div>
+          <h3>Tomas la foto</h3>
+          <p>La app te guía para capturar varios ángulos — sombrero, láminas, base — porque una sola foto casi nunca es suficiente para identificar bien un hongo.</p>
+        </div>
       </div>
       <div class="paso reveal">
-        <span class="num">02</span>
-        <div class="linea"></div>
-        <h3>Karol IA identifica</h3>
-        <p>Un modelo entrenado en 265 especies (EfficientNet V2-S + un sistema de pocos ejemplos para las especies más raras) sugiere la especie más probable y su nivel de confianza.</p>
+        <img class="foto-paso" src="img/paso-02-karol.webp" alt="Detalle de las láminas de un hongo silvestre">
+        <div class="paso-cuerpo">
+          <span class="num">02</span>
+          <div class="linea"></div>
+          <h3>Karol IA identifica</h3>
+          <p>Un modelo entrenado en 265 especies (EfficientNet V2-S + un sistema de pocos ejemplos para las especies más raras) sugiere la especie más probable y su nivel de confianza.</p>
+        </div>
       </div>
       <div class="paso reveal">
-        <span class="num">03</span>
-        <h3>La comunidad valida</h3>
-        <p>Validadores con formación en micología revisan las identificaciones dudosas y confirman o corrigen la especie antes de que se sume al mapa de biodiversidad.</p>
+        <img class="foto-paso" src="img/paso-03-comunidad.webp" alt="Grupo de hongos silvestres pequeños creciendo juntos sobre madera">
+        <div class="paso-cuerpo">
+          <span class="num">03</span>
+          <h3>La comunidad valida</h3>
+          <p>Validadores con formación en micología revisan las identificaciones dudosas y confirman o corrigen la especie antes de que se sume al mapa de biodiversidad.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -592,7 +661,7 @@
           <div class="spinner-hongo">
             <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="27" fill="none" stroke="var(--verde-marca)" stroke-opacity="0.15" stroke-width="6"/><path d="M32 5 A27 27 0 0 1 59 32" fill="none" stroke="var(--verde-marca)" stroke-width="6" stroke-linecap="round"/></svg>
             <div class="icono-centro">
-              <svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path d="M16 4C9 4 5 9 5 13.5C5 15 6 16 7.5 16H24.5C26 16 27 15 27 13.5C27 9 23 4 16 4Z" fill="#2D6A4F"/><rect x="13.5" y="16" width="5" height="12" rx="2.2" fill="#2D6A4F"/></svg>
+              <svg width="22" height="22" viewBox="0 0 32 32" fill="none"><path d="M16 4C9 4 5 9 5 13.5C5 15 6 16 7.5 16H24.5C26 16 27 15 27 13.5C27 9 23 4 16 4Z" fill="#4ADE9E"/><rect x="13.5" y="16" width="5" height="12" rx="2.2" fill="#4ADE9E"/></svg>
           </div>
         </div>
         <p>Cargando las observaciones más recientes…</p>
@@ -701,7 +770,7 @@
     <input type="password" class="campo-texto" id="login-password" placeholder="Mínimo 6 caracteres" autocomplete="current-password">
 
     <div id="login-olvide-wrap" style="text-align:right; margin:-6px 0 8px;">
-      <button type="button" id="login-olvide" style="background:none; border:none; color:var(--verde-marca); font-size:12.5px; cursor:pointer; font-weight:600;">¿Olvidaste tu contraseña?</button>
+      <button type="button" id="login-olvide" style="background:none; border:none; color:var(--verde-marca); font-size:13.5px; cursor:pointer; font-weight:600;">¿Olvidaste tu contraseña?</button>
     </div>
 
     <p class="modal-error" id="login-error" hidden></p>
@@ -713,7 +782,7 @@
 
     <div style="display:flex; align-items:center; gap:12px; margin:14px 0;">
       <div style="flex:1; height:1px; background:var(--piedra-linea);"></div>
-      <span style="font-size:12.5px; color:var(--piedra);">o</span>
+      <span style="font-size:13.5px; color:var(--piedra);">o</span>
       <div style="flex:1; height:1px; background:var(--piedra-linea);"></div>
     </div>
 
@@ -727,7 +796,7 @@
   <div class="contenedor">
     <div class="footer-fila">
       <a href="#" class="logo" style="font-size:17px;">
-        <svg class="logo-icono" viewBox="0 0 32 32" fill="none" width="22" height="22"><path d="M16 4C9 4 5 9 5 13.5C5 15 6 16 7.5 16H24.5C26 16 27 15 27 13.5C27 9 23 4 16 4Z" fill="#2D6A4F"/><rect x="13.5" y="16" width="5" height="12" rx="2.2" fill="#2D6A4F"/></svg>
+        <svg class="logo-icono" viewBox="0 0 32 32" fill="none" width="22" height="22"><path d="M16 4C9 4 5 9 5 13.5C5 15 6 16 7.5 16H24.5C26 16 27 15 27 13.5C27 9 23 4 16 4Z" fill="#4ADE9E"/><rect x="13.5" y="16" width="5" height="12" rx="2.2" fill="#4ADE9E"/></svg>
         mycocol.app
       </a>
       <div class="footer-links">
@@ -750,6 +819,27 @@
 <script>
 if (!window.__mycocolInit) {
 window.__mycocolInit = true;
+(function(){
+  // Esporas flotantes decorativas del hero — semilla determinista para
+  // que la distribución sea siempre la misma (no cambia entre recargas).
+  const campo = document.getElementById('spore-field');
+  if (campo && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let semilla = 7;
+    const azar = () => { semilla = (semilla * 9301 + 49297) % 233280; return semilla / 233280; };
+    const cantidad = window.innerWidth < 700 ? 14 : 22;
+    let html = '';
+    for (let i = 0; i < cantidad; i++) {
+      const left = azar() * 100;
+      const size = (2 + azar() * 4).toFixed(1);
+      const duracion = (14 + azar() * 20).toFixed(1);
+      const retraso = (azar() * -30).toFixed(1);
+      const drift = Math.round(-40 + azar() * 80);
+      const opacidad = (0.15 + azar() * 0.4).toFixed(2);
+      html += `<span style="left:${left}%; width:${size}px; height:${size}px; animation-duration:${duracion}s; animation-delay:${retraso}s; --spore-drift:${drift}px; --spore-opacity:${opacidad};"></span>`;
+    }
+    campo.innerHTML = html;
+  }
+})();
 (function(){
   const burger = document.getElementById('nav-burger');
   const navMovil = document.getElementById('nav-movil');
