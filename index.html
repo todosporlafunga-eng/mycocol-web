@@ -390,6 +390,7 @@
     margin-top:18px; border-top:1px solid var(--piedra-linea); padding-top:16px;
   }
   .ficha-titulo{font-size:12px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--verde-marca); margin-bottom:10px;}
+  .ficha-imagen{width:100%; aspect-ratio:1.6; object-fit:cover; border-radius:12px; margin-bottom:12px;}
   .ficha-filas{display:grid; grid-template-columns:auto 1fr; gap:7px 14px; margin:0;}
   .ficha-filas dt{font-size:13px; color:var(--piedra); white-space:nowrap;}
   .ficha-filas dd{font-size:13.5px; color:var(--tinta); margin:0;}
@@ -398,6 +399,36 @@
     background:var(--musgo-tenue); color:var(--verde-marca); margin:0 6px 4px 0;
   }
   .ficha-descripcion{font-size:14px; line-height:1.6; color:var(--tinta-suave); margin:14px 0 0; padding-top:14px; border-top:1px solid var(--piedra-linea);}
+  .ficha-chips{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;}
+
+  .top5-lista{margin-top:18px; border-top:1px solid var(--piedra-linea); padding-top:16px;}
+  .top5-item{
+    list-style:none; border:1px solid var(--piedra-linea); border-radius:12px; margin-bottom:8px; overflow:hidden;
+    background:var(--fondo);
+  }
+  .top5-item summary{
+    display:flex; align-items:center; gap:10px; padding:10px 12px; cursor:pointer; list-style:none;
+  }
+  .top5-item summary::-webkit-details-marker{display:none;}
+  .top5-item summary::after{
+    content:'▾'; margin-left:auto; color:var(--piedra); font-size:12px; flex-shrink:0; transition:transform .2s ease;
+  }
+  .top5-item[open] summary::after{transform:rotate(180deg);}
+  .top5-rank{
+    width:20px; height:20px; border-radius:50%; background:var(--piedra-linea); color:var(--tinta-suave);
+    font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .top5-rank-principal{background:var(--verde-marca); color:#fff;}
+  .top5-foto-wrap{width:36px; height:36px; border-radius:8px; overflow:hidden; flex-shrink:0; background:var(--tarjeta-hover);}
+  .top5-foto-wrap img{width:100%; height:100%; object-fit:cover;}
+  .top5-foto-vacia{width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:16px;}
+  .top5-info{display:flex; flex-direction:column; min-width:0; flex:1;}
+  .top5-nombre{font-style:italic; font-size:13.5px; color:var(--tinta); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .top5-comun{font-size:11.5px; color:var(--piedra);}
+  .top5-conf{font-size:12.5px; font-weight:700; color:var(--tinta-suave); flex-shrink:0; margin-left:4px;}
+  .top5-detalle{padding:0 14px 14px;}
+  .top5-detalle .ficha-imagen{margin-bottom:10px;}
+  .top5-detalle .ficha-filas{margin:0;}
 
   /* ---------- Límite diario / login ---------- */
   .feed-item.bloqueada{position:relative;}
@@ -480,6 +511,260 @@
   .reveal-init.visible{opacity:1; transform:none;}
   .reveal, .reveal-init{transition:opacity .6s ease, transform .6s ease;}
 </style>
+
+<style id="mycocol-app-css">
+  /* =========================================================
+     MYCOCOL APP WEB — capa de aplicación
+     Hereda íntegramente la línea gráfica del landing existente.
+     ========================================================= */
+  #mycocol-app{
+    display:none;
+    min-height:100vh;
+    background:var(--bosque);
+    color:var(--texto);
+  }
+  body.mycocol-app-activa > header.nav,
+  body.mycocol-app-activa > .contenedor,
+  body.mycocol-app-activa > footer{
+    display:none !important;
+  }
+  body.mycocol-app-activa #mycocol-app{display:block;}
+
+  .app-shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh;}
+  .app-sidebar{
+    position:sticky;top:0;height:100vh;
+    background:rgba(16,29,23,.96);
+    border-right:1px solid var(--borde);
+    padding:20px 14px;
+    display:flex;flex-direction:column;
+    z-index:20;
+  }
+  .app-brand{display:flex;align-items:center;gap:10px;padding:4px 10px 24px;
+    font-family:'Fraunces',serif;font-size:22px;font-weight:600;}
+  .app-brand svg{width:28px;height:28px;flex:none;}
+  .app-user-mini{display:flex;align-items:center;gap:10px;padding:11px 10px;
+    border:1px solid var(--borde);border-radius:14px;background:rgba(255,255,255,.035);margin-bottom:18px;}
+  .app-avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;
+    background:var(--musgo-tenue);color:var(--primario);font-weight:700;}
+  .app-user-mini strong{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px;}
+  .app-user-mini span{display:block;font-size:11px;color:var(--piedra);}
+  .app-nav{display:flex;flex-direction:column;gap:4px;}
+  .app-nav button{
+    border:0;background:transparent;color:var(--texto-suave);cursor:pointer;
+    text-align:left;padding:11px 12px;border-radius:11px;font:500 14px Roboto,sans-serif;
+    display:flex;align-items:center;gap:11px;
+  }
+  .app-nav button:hover,.app-nav button.activo{background:var(--musgo-tenue);color:var(--primario);}
+  .app-nav .ico{width:20px;text-align:center;font-size:16px;}
+  .app-sidebar-bottom{margin-top:auto;display:grid;gap:6px;}
+  .app-sidebar-bottom button{border:0;background:transparent;color:var(--piedra);cursor:pointer;padding:10px;text-align:left;border-radius:10px;}
+  .app-sidebar-bottom button:hover{background:rgba(255,255,255,.05);color:var(--texto);}
+
+  .app-main{min-width:0;background:linear-gradient(180deg,var(--bosque),#12221a);}
+  .app-topbar{
+    height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+    padding:0 34px;border-bottom:1px solid var(--borde);
+    position:sticky;top:0;z-index:15;background:rgba(16,29,23,.88);backdrop-filter:blur(12px);
+  }
+  .app-topbar h1{font-size:25px;color:var(--texto);}
+  .app-top-actions{display:flex;gap:10px;align-items:center;}
+  .app-icon-btn{width:40px;height:40px;border:1px solid var(--borde);border-radius:11px;background:transparent;color:var(--texto);cursor:pointer;}
+  .app-mobile-menu{display:none;}
+  .app-content{padding:34px;max-width:1500px;margin:auto;}
+  .app-page{display:none;}
+  .app-page.activa{display:block;}
+  .app-eyebrow{font:500 11px 'Roboto Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--primario);}
+  .app-title{font:600 clamp(30px,3vw,42px) 'Fraunces',serif;line-height:1.1;margin:8px 0 8px;color:var(--texto);}
+  .app-subtitle{color:var(--texto-suave);margin:0 0 26px;max-width:720px;font-size:15px;}
+
+  .app-grid{display:grid;gap:18px;}
+  .app-grid-4{grid-template-columns:repeat(4,1fr);}
+  .app-grid-3{grid-template-columns:repeat(3,1fr);}
+  .app-grid-2{grid-template-columns:repeat(2,1fr);}
+  .app-card{background:var(--tarjeta);border:1px solid var(--borde);border-radius:18px;box-shadow:var(--sombra);}
+  .app-card-pad{padding:22px;}
+  .app-stat{padding:20px;}
+  .app-stat .valor{font:600 30px 'Fraunces',serif;color:var(--texto);}
+  .app-stat .label{font-size:12px;color:var(--piedra);margin-top:3px;}
+  .app-stat .trend{font-size:11px;color:var(--primario);margin-top:10px;}
+  .app-section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin:32px 0 14px;}
+  .app-section-head h2{font:600 22px 'Fraunces',serif;color:var(--texto);margin:0;}
+  .app-link{border:0;background:none;color:var(--primario);cursor:pointer;font-weight:600;}
+
+  .app-welcome{
+    padding:28px;border-radius:22px;border:1px solid rgba(74,222,158,.18);
+    background:radial-gradient(circle at 80% 0%,rgba(74,222,158,.16),transparent 42%),var(--tarjeta);
+    margin-bottom:18px;
+  }
+  .app-welcome-row{display:flex;align-items:center;justify-content:space-between;gap:20px;}
+  .app-welcome h2{font:600 30px 'Fraunces',serif;margin:6px 0;color:var(--texto);}
+  .app-actions{display:flex;flex-wrap:wrap;gap:10px;}
+  .app-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 17px;border-radius:100px;border:1px solid var(--borde);background:transparent;color:var(--texto);font-weight:700;cursor:pointer;}
+  .app-btn.primary{background:var(--primario);border-color:var(--primario);color:#062116;}
+  .app-btn.primary:hover{background:var(--primario-hover);}
+  .app-btn:hover{border-color:var(--primario);}
+  .app-btn.danger{color:#ff9b8a;border-color:rgba(226,96,74,.35);}
+
+  .app-observation{overflow:hidden;}
+  .app-observation .obs-img{aspect-ratio:4/3;background:#14251d;position:relative;}
+  .app-observation .obs-img img{width:100%;height:100%;object-fit:cover;}
+  .app-observation .obs-body{padding:15px;}
+  .app-observation .obs-title{font:500 17px Fraunces,serif;font-style:italic;color:var(--texto);}
+  .app-observation .obs-meta{font-size:12px;color:var(--piedra);margin-top:4px;}
+  .app-confidence{display:inline-flex;padding:4px 9px;border-radius:100px;background:var(--musgo-tenue);color:var(--primario);font:500 11px 'Roboto Mono',monospace;}
+  .app-empty{padding:45px 25px;text-align:center;color:var(--piedra);}
+  .app-empty .big{font-size:40px;margin-bottom:8px;}
+
+  .app-table-wrap{overflow:auto;}
+  .app-table{width:100%;border-collapse:collapse;min-width:700px;}
+  .app-table th,.app-table td{padding:13px 12px;border-bottom:1px solid var(--borde);text-align:left;font-size:13px;}
+  .app-table th{color:var(--piedra);font:500 11px 'Roboto Mono',monospace;text-transform:uppercase;letter-spacing:.05em;}
+  .app-table td{color:var(--texto-suave);}
+  .app-table .cientifico{color:var(--texto);}
+
+  .app-identify{
+    max-width:820px;margin:auto;padding:28px;background:var(--tarjeta);border:1px solid var(--borde);border-radius:24px;
+  }
+  .app-identify-steps{display:flex;align-items:center;justify-content:center;margin-bottom:28px;}
+  .app-identify-step{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08);color:var(--piedra);font-weight:700;}
+  .app-identify-step.active{background:var(--primario);color:#062116;}
+  .app-identify-line{width:70px;height:2px;background:var(--borde);}
+  .app-photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0;}
+  .app-photo-slot{aspect-ratio:1;border:1.5px dashed var(--piedra);border-radius:15px;display:grid;place-items:center;text-align:center;overflow:hidden;cursor:pointer;background:rgba(255,255,255,.025);}
+  .app-photo-slot:hover{border-color:var(--primario);background:var(--musgo-tenue);}
+  .app-photo-slot img{width:100%;height:100%;object-fit:cover;}
+  .app-photo-slot span{padding:15px;color:var(--piedra);font-size:12px;}
+  .app-note{font-size:12px;color:var(--piedra);padding:12px;border-radius:10px;background:rgba(227,166,78,.06);border:1px solid rgba(227,166,78,.2);}
+  .app-progress{height:8px;background:rgba(255,255,255,.08);border-radius:100px;overflow:hidden;}
+  .app-progress > span{display:block;height:100%;background:var(--primario);border-radius:100px;}
+
+  .app-result-grid{display:grid;grid-template-columns:minmax(300px,.9fr) 1.1fr;gap:20px;}
+  .app-result-photo{min-height:460px;border-radius:20px;overflow:hidden;background:#14251d;}
+  .app-result-photo img{width:100%;height:100%;object-fit:cover;}
+  .app-result-panel{padding:24px;}
+  .app-alert{padding:14px;border-radius:12px;background:var(--peligro-fondo);border:1px solid rgba(226,96,74,.35);color:#ffb0a2;margin:15px 0;}
+  .app-dl{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;margin-top:18px;}
+  .app-dl dt{color:var(--piedra);font-size:12px;}
+  .app-dl dd{margin:0;color:var(--texto-suave);font-size:13px;}
+  .app-top5{margin:18px 0 0;padding:0;list-style:none;}
+  .app-top5 li{padding:8px 0;border-bottom:1px solid var(--borde);font-size:13px;color:var(--texto-suave);}
+  .app-top5 li strong{color:var(--primario);margin-right:8px;}
+
+  .app-map{
+    min-height:570px;border-radius:20px;border:1px solid var(--borde);position:relative;overflow:hidden;
+    background:
+      radial-gradient(circle at 20% 30%,rgba(74,222,158,.17),transparent 28%),
+      radial-gradient(circle at 70% 60%,rgba(227,166,78,.12),transparent 25%),
+      linear-gradient(145deg,#152920,#0d1813);
+  }
+  .app-map-grid{position:absolute;inset:0;opacity:.2;background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);background-size:55px 55px;}
+  .app-map-pin{position:absolute;width:18px;height:18px;border-radius:50% 50% 50% 0;background:var(--primario);transform:rotate(-45deg);box-shadow:0 0 0 7px rgba(74,222,158,.12);}
+  .app-map-pin.sensible{background:var(--ambar);box-shadow:0 0 0 7px rgba(227,166,78,.12);}
+  .app-map-legend{position:absolute;left:18px;bottom:18px;background:rgba(16,29,23,.9);border:1px solid var(--borde);border-radius:12px;padding:12px;font-size:12px;color:var(--texto-suave);}
+  .app-map-legend div{display:flex;align-items:center;gap:7px;margin:5px 0;}
+  .app-map-dot{width:8px;height:8px;border-radius:50%;background:var(--primario);}
+  .app-map-dot.a{background:var(--ambar);}
+
+  .app-profile{display:grid;grid-template-columns:280px 1fr;gap:20px;}
+  .app-profile-card{text-align:center;padding:28px;}
+  .app-profile-avatar{width:90px;height:90px;border-radius:50%;display:grid;place-items:center;margin:0 auto 15px;background:var(--musgo-tenue);color:var(--primario);font:600 32px Fraunces,serif;}
+  .app-badges{display:flex;flex-wrap:wrap;gap:10px;}
+  .app-badge{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.05);border:1px solid var(--borde);font-size:24px;}
+  .app-field{display:grid;gap:6px;margin-bottom:14px;}
+  .app-field label{font-size:11px;color:var(--piedra);text-transform:uppercase;letter-spacing:.06em;}
+  .app-field input,.app-field textarea,.app-field select{width:100%;padding:11px 13px;background:var(--fondo);color:var(--texto);border:1px solid var(--borde);border-radius:10px;font:14px Roboto,sans-serif;}
+  .app-field input:focus,.app-field textarea:focus{outline:none;border-color:var(--primario);}
+
+  .app-validator{display:grid;grid-template-columns:330px 1fr;gap:20px;}
+  .app-queue{max-height:690px;overflow:auto;}
+  .app-queue-item{display:grid;grid-template-columns:60px 1fr auto;gap:10px;padding:11px;border-bottom:1px solid var(--borde);cursor:pointer;}
+  .app-queue-item:hover,.app-queue-item.selected{background:var(--musgo-tenue);}
+  .app-queue-item img{width:60px;height:60px;object-fit:cover;border-radius:9px;background:#14251d;}
+  .app-queue-item strong{font:500 14px Fraunces,serif;font-style:italic;color:var(--texto);}
+  .app-queue-item small{display:block;color:var(--piedra);font-size:11px;margin-top:3px;}
+  .app-validator-detail{padding:22px;}
+  .app-validator-detail .big-photo{width:100%;max-height:390px;object-fit:contain;background:#101d17;border-radius:14px;}
+  .app-validation-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+
+  .app-toast{position:fixed;right:22px;bottom:22px;z-index:1000;padding:13px 17px;border-radius:12px;background:var(--tarjeta);border:1px solid var(--borde);box-shadow:var(--sombra);color:var(--texto);display:none;}
+  .app-toast.show{display:block;}
+
+  @media(max-width:1050px){
+    .app-shell{grid-template-columns:78px 1fr;}
+    .app-sidebar{padding:18px 9px;}
+    .app-brand{justify-content:center;padding-bottom:20px;}
+    .app-brand span,.app-user-mini .user-text,.app-nav button .label,.app-sidebar-bottom .label{display:none;}
+    .app-user-mini{justify-content:center;}
+    .app-nav button{justify-content:center;}
+    .app-sidebar-bottom button{text-align:center;}
+    .app-grid-4{grid-template-columns:repeat(2,1fr);}
+    .app-profile,.app-validator{grid-template-columns:1fr;}
+  }
+  @media(max-width:720px){
+    .app-shell{display:block;}
+    .app-sidebar{position:fixed;left:0;right:0;bottom:0;top:auto;height:66px;border-right:0;border-top:1px solid var(--borde);padding:5px;z-index:50;}
+    .app-brand,.app-user-mini,.app-sidebar-bottom{display:none;}
+    .app-nav{display:grid;grid-template-columns:repeat(5,1fr);height:100%;}
+    .app-nav button{justify-content:center;padding:5px;border-radius:9px;}
+    .app-nav button .label{display:block;font-size:9px;}
+    .app-nav .ico{display:block;font-size:17px;}
+    .app-topbar{height:62px;padding:0 15px;}
+    .app-topbar h1{font-size:21px;}
+    .app-content{padding:20px 14px 88px;}
+    .app-grid-4,.app-grid-3,.app-grid-2{grid-template-columns:1fr;}
+    .app-welcome-row{display:block;}
+    .app-welcome .app-actions{margin-top:18px;}
+    .app-photo-grid{grid-template-columns:1fr;}
+    .app-result-grid{grid-template-columns:1fr;}
+    .app-result-photo{min-height:300px;max-height:380px;}
+  }
+</style>
+
+<style id="mycocol-map-css">
+  .web-map-shell{position:relative;display:grid;grid-template-columns:1fr 330px;gap:16px;}
+  .web-map-canvas{min-height:650px;position:relative;overflow:hidden;border:1px solid var(--borde);border-radius:22px;background:
+    radial-gradient(circle at 20% 20%,rgba(74,222,158,.13),transparent 25%),
+    radial-gradient(circle at 80% 70%,rgba(227,166,78,.09),transparent 23%),
+    linear-gradient(145deg,#172c22,#0c1712);}
+  .web-map-canvas:before{content:"";position:absolute;inset:0;opacity:.16;background-image:
+    linear-gradient(30deg,rgba(255,255,255,.18) 1px,transparent 1px),
+    linear-gradient(150deg,rgba(255,255,255,.12) 1px,transparent 1px);
+    background-size:100px 70px;}
+  .web-map-road{position:absolute;height:2px;background:rgba(221,235,226,.12);transform-origin:left center;border-radius:99px;}
+  .web-map-water{position:absolute;background:rgba(77,148,166,.10);border:1px solid rgba(77,148,166,.13);border-radius:50% 40% 60% 45%;filter:blur(.2px);}
+  .web-map-controls{position:absolute;top:16px;right:16px;display:grid;gap:7px;z-index:3;}
+  .web-map-controls button{width:38px;height:38px;border:1px solid var(--borde);background:rgba(16,29,23,.92);color:var(--texto);border-radius:10px;cursor:pointer;font-size:18px;}
+  .web-map-controls button:hover{border-color:var(--primario);color:var(--primario);}
+  .web-map-search{position:absolute;top:16px;left:16px;width:min(360px,calc(100% - 75px));z-index:3;}
+  .web-map-search input{width:100%;box-sizing:border-box;padding:13px 15px;border-radius:100px;border:1px solid var(--borde);background:rgba(16,29,23,.94);color:var(--texto);font:14px Roboto,sans-serif;box-shadow:var(--sombra);}
+  .web-map-search input:focus{outline:none;border-color:var(--primario);}
+  .web-map-search input::placeholder{color:var(--piedra);}
+  .web-map-pin-real{position:absolute;width:18px;height:18px;border-radius:50% 50% 50% 0;background:var(--primario);transform:rotate(-45deg);box-shadow:0 0 0 7px rgba(74,222,158,.12);cursor:pointer;z-index:2;transition:.18s;}
+  .web-map-pin-real:hover{transform:rotate(-45deg) scale(1.2);box-shadow:0 0 0 10px rgba(74,222,158,.16);}
+  .web-map-pin-real.sensible{background:var(--ambar);box-shadow:0 0 0 7px rgba(227,166,78,.12);}
+  .web-map-pin-real.selected{outline:2px solid white;outline-offset:4px;}
+  .web-map-you{position:absolute;width:13px;height:13px;border-radius:50%;background:#7cb7ff;border:3px solid #dbeaff;box-shadow:0 0 0 9px rgba(124,183,255,.15);z-index:2;display:none;}
+  .web-map-panel{padding:20px;}
+  .web-map-panel h3{font:600 22px Fraunces,serif;color:var(--texto);margin:0 0 4px;}
+  .web-map-panel .muted{font-size:12px;color:var(--piedra);line-height:1.5;}
+  .web-map-filter{display:flex;gap:7px;flex-wrap:wrap;margin:17px 0;}
+  .web-map-filter button{border:1px solid var(--borde);background:transparent;color:var(--texto-suave);border-radius:100px;padding:7px 10px;font-size:11px;cursor:pointer;}
+  .web-map-filter button.active,.web-map-filter button:hover{background:var(--musgo-tenue);border-color:var(--primario);color:var(--primario);}
+  .web-map-obs-list{display:grid;gap:8px;max-height:450px;overflow:auto;margin-top:15px;}
+  .web-map-obs{padding:11px;border:1px solid var(--borde);border-radius:12px;cursor:pointer;background:rgba(255,255,255,.015);}
+  .web-map-obs:hover,.web-map-obs.selected{border-color:var(--primario);background:var(--musgo-tenue);}
+  .web-map-obs strong{display:block;color:var(--texto);font:500 15px Fraunces,serif;font-style:italic;}
+  .web-map-obs span{display:block;color:var(--piedra);font-size:11px;margin-top:3px;}
+  .web-map-detail{margin-top:14px;padding:14px;border-radius:13px;background:rgba(255,255,255,.025);border:1px solid var(--borde);}
+  .web-map-detail img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;margin-bottom:10px;}
+  .web-map-legend2{position:absolute;bottom:16px;left:16px;z-index:3;background:rgba(16,29,23,.92);border:1px solid var(--borde);border-radius:12px;padding:10px 12px;color:var(--texto-suave);font-size:11px;}
+  .web-map-legend2 div{display:flex;align-items:center;gap:7px;margin:4px 0;}
+  .web-map-legend2 i{width:8px;height:8px;border-radius:50%;display:block;background:var(--primario);}
+  .web-map-legend2 i.amber{background:var(--ambar);}
+  .web-map-legend2 i.blue{background:#7cb7ff;}
+  @media(max-width:900px){.web-map-shell{grid-template-columns:1fr}.web-map-panel{order:2}.web-map-canvas{min-height:560px}}
+</style>
+
 </head>
 <body>
 
@@ -620,8 +905,15 @@
 
         <div id="ficha-especie" class="ficha-especie" hidden>
           <div class="ficha-titulo">Ficha de la especie</div>
+          <img id="ficha-imagen" class="ficha-imagen" hidden alt="Foto de referencia de la especie">
           <dl id="ficha-filas" class="ficha-filas"></dl>
           <p id="ficha-descripcion" class="ficha-descripcion" hidden></p>
+        </div>
+
+        <div id="top5-especie" class="top5-lista" hidden>
+          <div class="ficha-titulo">Otras posibilidades</div>
+          <p class="modal-nota" style="margin:-4px 0 10px;">Toca cada una para ver sus características.</p>
+          <div id="top5-items"></div>
         </div>
 
         <button class="btn btn-primario" id="btn-cerrar-resultado" style="width:100%; margin-top:14px;">Identificar otro</button>
@@ -812,6 +1104,244 @@
   </div>
 </div>
 
+<div id="mycocol-app">
+  <div class="app-shell">
+    <aside class="app-sidebar">
+      <div class="app-brand">
+        <svg viewBox="0 0 32 32" fill="none"><path d="M16 4C9 4 5 9 5 13.5C5 15 6 16 7.5 16H24.5C26 16 27 15 27 13.5C27 9 23 4 16 4Z" fill="#4ADE9E"/><rect x="13.5" y="16" width="5" height="12" rx="2.2" fill="#4ADE9E"/></svg>
+        <span>mycocol</span>
+      </div>
+      <div class="app-user-mini">
+        <div class="app-avatar" id="app-avatar">M</div>
+        <div class="user-text"><strong id="app-user-name">Explorador</strong><span id="app-user-role">Comunidad</span></div>
+      </div>
+      <nav class="app-nav" id="app-nav">
+        <button data-page="inicio" class="activo"><span class="ico">⌂</span><span class="label">Inicio</span></button>
+        <button data-page="identificar"><span class="ico">📷</span><span class="label">Identificar</span></button>
+        <button data-page="observaciones"><span class="ico">🍄</span><span class="label">Mis hallazgos</span></button>
+        <button data-page="explorar-web"><span class="ico">🔎</span><span class="label">Explorar</span></button>
+        <button data-page="mapa-web"><span class="ico">⌖</span><span class="label">Mapa</span></button>
+        <button data-page="perfil-web"><span class="ico">◉</span><span class="label">Perfil</span></button>
+        <button data-page="validacion-web" id="nav-validacion" style="display:none;"><span class="ico">✓</span><span class="label">Validación</span></button>
+      </nav>
+      <div class="app-sidebar-bottom">
+        <button id="app-back-landing"><span class="label">← Volver al sitio</span></button>
+        <button id="app-logout"><span class="label">Cerrar sesión</span></button>
+      </div>
+    </aside>
+
+    <main class="app-main">
+      <header class="app-topbar">
+        <button class="app-icon-btn app-mobile-menu" id="app-mobile-menu">☰</button>
+        <div><h1 id="app-page-title">Inicio</h1></div>
+        <div class="app-top-actions">
+          <button class="app-icon-btn" id="app-refresh" title="Actualizar">↻</button>
+          <button class="app-icon-btn" id="app-top-profile" title="Perfil">◉</button>
+        </div>
+      </header>
+
+      <div class="app-content">
+        <!-- INICIO -->
+        <section class="app-page activa" id="app-page-inicio">
+          <div class="app-welcome">
+            <span class="app-eyebrow">Panel de exploración</span>
+            <div class="app-welcome-row">
+              <div>
+                <h2>Hola, <span id="dashboard-user">explorador</span></h2>
+                <p class="app-subtitle" style="margin-bottom:0">Registra tus encuentros, aprende de las especies y ayuda a construir el mapa de biodiversidad.</p>
+              </div>
+              <div class="app-actions">
+                <button class="app-btn primary" data-go="identificar">📷 Identificar un hongo</button>
+                <button class="app-btn" data-go="explorar-web">🔎 Explorar especies</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="app-grid app-grid-4">
+            <div class="app-card app-stat"><div class="valor" id="dash-total">—</div><div class="label">Mis observaciones</div><div class="trend">Tus registros</div></div>
+            <div class="app-card app-stat"><div class="valor" id="dash-validadas">—</div><div class="label">Validadas</div><div class="trend">Aportan al mapa</div></div>
+            <div class="app-card app-stat"><div class="valor" id="dash-especies">—</div><div class="label">Especies encontradas</div><div class="trend">Diversidad personal</div></div>
+            <div class="app-card app-stat"><div class="valor">265</div><div class="label">Especies en el modelo</div><div class="trend">Karol IA</div></div>
+          </div>
+
+          <div class="app-section-head"><h2>Mis observaciones recientes</h2><button class="app-link" data-go="observaciones">Ver todas →</button></div>
+          <div class="app-grid app-grid-3" id="dash-observaciones">
+            <div class="app-card app-empty"><div class="big">🍄</div>Cargando tus observaciones…</div>
+          </div>
+
+          <div class="app-section-head"><h2>Comunidad</h2></div>
+          <div class="app-grid app-grid-3">
+            <div class="app-card app-card-pad"><span class="app-eyebrow">265</span><h3 style="color:var(--texto);font:600 20px Fraunces,serif;margin:7px 0">Especies en el modelo</h3><p style="color:var(--texto-suave);font-size:13px">Identificación asistida por IA con especies comunes y un conjunto few-shot para especies raras.</p></div>
+            <div class="app-card app-card-pad"><span class="app-eyebrow">Validación</span><h3 style="color:var(--texto);font:600 20px Fraunces,serif;margin:7px 0">IA + expertos</h3><p style="color:var(--texto-suave);font-size:13px">Las observaciones dudosas pueden pasar por revisión de validadores con formación en micología.</p></div>
+            <div class="app-card app-card-pad"><span class="app-eyebrow">Seguridad</span><h3 style="color:var(--texto);font:600 20px Fraunces,serif;margin:7px 0">Nunca es una autorización</h3><p style="color:var(--texto-suave);font-size:13px">Una identificación no sustituye la confirmación directa de un experto antes de consumir un hongo silvestre.</p></div>
+          </div>
+        </section>
+
+        <!-- IDENTIFICAR -->
+        <section class="app-page" id="app-page-identificar">
+          <span class="app-eyebrow">Karol IA</span>
+          <h2 class="app-title">Identifica un hongo</h2>
+          <p class="app-subtitle">Sigue el mismo flujo de la app: una vista superior es obligatoria y las vistas lateral y de láminas ayudan a mejorar la identificación.</p>
+          <div class="app-identify" id="web-identify">
+            <div class="app-identify-steps">
+              <div class="app-identify-step active" id="web-step-0">1</div><div class="app-identify-line"></div>
+              <div class="app-identify-step" id="web-step-1">2</div><div class="app-identify-line"></div>
+              <div class="app-identify-step" id="web-step-2">3</div>
+            </div>
+            <div id="web-identify-form">
+              <div style="text-align:center">
+                <span class="app-eyebrow" id="web-step-label">Vista de arriba</span>
+                <h3 id="web-step-title" style="font:600 26px Fraunces,serif;color:var(--texto);margin:8px 0">Fotografía el sombrero</h3>
+                <p id="web-step-desc" style="color:var(--texto-suave);font-size:14px">Buena luz natural, sin flash directo y suficiente detalle.</p>
+              </div>
+              <div class="app-photo-grid">
+                <label class="app-photo-slot" id="web-photo-slot" for="web-photo-input">
+                  <span id="web-photo-empty">📷<br>Seleccionar fotografía</span>
+                  <img id="web-photo-img" hidden>
+                  <input id="web-photo-input" type="file" accept="image/*" hidden>
+                </label>
+              </div>
+              <div class="app-note">📍 Al iniciar la identificación se solicitará la ubicación para registrar la observación.</div>
+              <div id="web-identify-error" class="app-alert" hidden></div>
+              <div class="app-actions" style="margin-top:18px">
+                <button class="app-btn" id="web-step-back" style="display:none">Atrás</button>
+                <button class="app-btn" id="web-step-skip" style="display:none">Omitir</button>
+                <button class="app-btn primary" id="web-step-next">Siguiente</button>
+              </div>
+            </div>
+            <div id="web-identify-loading" hidden style="text-align:center;padding:70px 20px">
+              <div class="spinner-hongo" style="margin:0 auto 18px"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="27" fill="none" stroke="var(--verde-marca)" stroke-opacity=".15" stroke-width="6"/><path d="M32 5 A27 27 0 0 1 59 32" fill="none" stroke="var(--verde-marca)" stroke-width="6" stroke-linecap="round"/></svg></div>
+              <h3 id="web-loading-title" style="font:600 22px Fraunces,serif;color:var(--texto)">Identificando…</h3>
+              <p id="web-loading-text" style="color:var(--piedra)">Preparando las fotografías.</p>
+            </div>
+            <div id="web-identify-result" hidden></div>
+          </div>
+        </section>
+
+        <!-- OBSERVACIONES -->
+        <section class="app-page" id="app-page-observaciones">
+          <span class="app-eyebrow">Mi cuaderno de campo</span>
+          <h2 class="app-title">Mis observaciones</h2>
+          <p class="app-subtitle">Aquí quedan tus registros y el estado de validación de cada identificación.</p>
+          <div class="app-card app-card-pad app-table-wrap">
+            <table class="app-table"><thead><tr><th>Especie</th><th>Confianza</th><th>Estado</th><th>Fecha</th></tr></thead>
+              <tbody id="my-observations-table"><tr><td colspan="4" class="app-empty">Cargando…</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- EXPLORAR -->
+        <section class="app-page" id="app-page-explorar-web">
+          <span class="app-eyebrow">Catálogo</span>
+          <h2 class="app-title">Explorar especies</h2>
+          <p class="app-subtitle">Busca en el catálogo de especies de Mycocol y consulta la información disponible.</p>
+          <div class="app-card app-card-pad">
+            <div class="app-field"><label>Buscar especie</label><input id="species-search" placeholder="Nombre científico o común…"></div>
+          </div>
+          <div class="app-section-head"><h2>Resultados</h2><span id="species-count" style="color:var(--piedra);font-size:12px"></span></div>
+          <div class="app-grid app-grid-3" id="species-grid"><div class="app-card app-empty">Escribe para buscar.</div></div>
+        </section>
+
+        <!-- MAPA -->
+        <section class="app-page" id="app-page-mapa-web">
+          <span class="app-eyebrow">Biodiversidad</span>
+          <h2 class="app-title">Mapa de observaciones</h2>
+          <p class="app-subtitle">Explora los registros de Mycocol. Las observaciones validadas alimentan el mapa y las ubicaciones sensibles se protegen.</p>
+          
+<div class="web-map-shell">
+  <div class="web-map-canvas" id="mycocol-map-canvas">
+    <div class="web-map-search"><input id="web-map-search-input" placeholder="Buscar especie en el mapa…"></div>
+    <div class="web-map-controls">
+      <button id="web-map-plus" title="Acercar">+</button>
+      <button id="web-map-minus" title="Alejar">−</button>
+      <button id="web-map-locate" title="Mi ubicación">⌖</button>
+    </div>
+
+    <div class="web-map-water" style="width:42%;height:22%;left:34%;top:18%;transform:rotate(-10deg)"></div>
+    <div class="web-map-water" style="width:27%;height:15%;left:5%;top:58%;transform:rotate(18deg)"></div>
+    <div class="web-map-road" style="width:76%;left:5%;top:43%;transform:rotate(-18deg)"></div>
+    <div class="web-map-road" style="width:60%;left:26%;top:74%;transform:rotate(13deg)"></div>
+    <div class="web-map-road" style="width:51%;left:38%;top:15%;transform:rotate(72deg)"></div>
+    <div class="web-map-road" style="width:42%;left:5%;top:28%;transform:rotate(65deg)"></div>
+
+    <div id="web-map-pins"></div>
+    <div id="web-map-you" class="web-map-you"></div>
+
+    <div class="web-map-legend2">
+      <div><i></i> Observación validada</div>
+      <div><i class="amber"></i> Ubicación sensible</div>
+      <div><i class="blue"></i> Tu ubicación</div>
+    </div>
+  </div>
+
+  <aside class="app-card web-map-panel">
+    <span class="app-eyebrow">Mapa de biodiversidad</span>
+    <h3>Observaciones</h3>
+    <p class="muted">Explora registros validados por la comunidad. Las ubicaciones sensibles se muestran de forma protegida.</p>
+
+    <div class="web-map-filter">
+      <button class="active" data-map-filter="all">Todas</button>
+      <button data-map-filter="validated">Validadas</button>
+      <button data-map-filter="sensitive">Sensibles</button>
+      <button data-map-filter="mine">Mías</button>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span class="app-eyebrow">Registros visibles</span>
+      <strong id="web-map-count" style="color:var(--texto);font-size:13px">—</strong>
+    </div>
+
+    <div class="web-map-obs-list" id="web-map-obs-list">
+      <div class="app-empty">Cargando observaciones…</div>
+    </div>
+
+    <div class="web-map-detail" id="web-map-detail" hidden></div>
+  </aside>
+</div>
+
+        </section>
+
+        <!-- PERFIL -->
+        <section class="app-page" id="app-page-perfil-web">
+          <span class="app-eyebrow">Mi cuenta</span>
+          <h2 class="app-title">Mi perfil</h2>
+          <p class="app-subtitle">La cuenta web comparte autenticación con el ecosistema Mycocol.</p>
+          <div class="app-profile">
+            <div class="app-card app-profile-card">
+              <div class="app-profile-avatar" id="profile-avatar">M</div>
+              <h3 id="profile-name" style="color:var(--texto);font:600 23px Fraunces,serif;margin:0">Explorador</h3>
+              <p id="profile-email" style="color:var(--piedra);font-size:12px"></p>
+              <div class="app-section-head" style="margin-top:25px"><h2 style="font-size:17px">Insignias</h2></div>
+              <div class="app-badges"><div class="app-badge">🍄</div><div class="app-badge">🔥</div><div class="app-badge">✅</div><div class="app-badge">✨</div><div class="app-badge">🤝</div></div>
+            </div>
+            <div class="app-card app-card-pad">
+              <h3 style="font:600 22px Fraunces,serif;color:var(--texto);margin-top:0">Información de cuenta</h3>
+              <div class="app-field"><label>Nombre de usuario</label><input id="profile-username" disabled></div>
+              <div class="app-field"><label>Correo</label><input id="profile-email-input" disabled></div>
+              <div class="app-note">La edición de perfil seguirá el mismo esquema de usuarios que ya utiliza la aplicación móvil.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- VALIDACIÓN -->
+        <section class="app-page" id="app-page-validacion-web">
+          <span class="app-eyebrow">Ciencia ciudadana</span>
+          <h2 class="app-title">Cola de validación</h2>
+          <p class="app-subtitle">Revisa observaciones pendientes, consulta la predicción y confirma o corrige la especie. Las de menos de 50% de confianza reciben prioridad visual.</p>
+          <div class="app-validator">
+            <div class="app-card app-queue" id="validator-queue"><div class="app-empty">Cargando cola…</div></div>
+            <div class="app-card app-validator-detail" id="validator-detail">
+              <div class="app-empty"><div class="big">🔬</div>Selecciona una observación para revisarla.</div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <div class="app-toast" id="app-toast"></div>
+</div>
+
+
 <footer>
   <div class="contenedor">
     <div class="footer-fila">
@@ -881,6 +1411,9 @@ window.__mycocolInit = true;
     "https://bsjdvgjgvrgdrgoziatj.supabase.co",
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzamR2Z2pndnJnZHJnb3ppYXRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3NjI3NTAsImV4cCI6MjA5ODMzODc1MH0.Grqy48k0BbLtZO0jMKJ86s8bIGQbRpf4k6y22T7TP2k"
   );
+  // El script del mapa (mycocol-map-js) reutiliza este mismo cliente en
+  // vez de crear uno nuevo, para no duplicar la sesión.
+  window.__mycocolSupabaseClient = sbClient;
 
   function tiempoRelativo(iso){
     const dif = (Date.now() - new Date(iso).getTime()) / 1000;
@@ -1054,6 +1587,11 @@ window.__mycocolInit = true;
         btn.onclick = abrirLogin;
       }
     });
+    if (logueado) {
+      activarAppShell(session);
+    } else {
+      desactivarAppShell();
+    }
   }
 
   if (modalLogin) {
@@ -1408,6 +1946,119 @@ window.__mycocolInit = true;
       }
     }
 
+    function nombreLegible(slug){
+      return (slug || '').replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    function escapeHTML(str){
+      return String(str ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    // Misma selección de campos que usa mostrarFichaEspecie — separada
+    // aquí para poder reutilizarla también en el listado de top5.
+    const CAMPOS_FICHA_ESPECIE =
+      'nombre_comun, orden, familia, genero, forma_sombrero, color_sombrero, tipo_laminas, color_laminas, tipo_pie, diametro_cm, habitat, sustrato, altitud_m, distribucion, tiene_anillo, tiene_volva, color_esporas, brilla_oscuridad, olor, toxicidad, uso_medicinal, descripcion_completa, imagen_url, es_sensible';
+
+    function calcularFichaEspecie(e, ocultarToxicidad){
+      const filas = [];
+      const agregar = (etiqueta, valor) => {
+        if (valor !== null && valor !== undefined && valor !== '') filas.push([etiqueta, valor]);
+      };
+      agregar('Orden', e.orden);
+      agregar('Familia', [e.familia, e.genero].filter(Boolean).join(' · '));
+      agregar('Sombrero', [e.forma_sombrero, e.color_sombrero].filter(Boolean).join(', '));
+      agregar('Láminas', [e.tipo_laminas, e.color_laminas].filter(Boolean).join(', '));
+      agregar('Pie', e.tipo_pie);
+      agregar('Tamaño', e.diametro_cm ? `${e.diametro_cm} cm de diámetro` : null);
+      agregar('Hábitat', [e.habitat, e.sustrato].filter(Boolean).join(' · '));
+      agregar('Altitud', e.altitud_m ? `${e.altitud_m} msnm` : null);
+      agregar('Distribución', e.distribucion);
+      agregar('Esporas', e.color_esporas);
+      agregar('Olor', e.olor);
+      if (!ocultarToxicidad) agregar('Toxicidad', e.toxicidad);
+      agregar('Uso medicinal', e.uso_medicinal);
+
+      const chips = [];
+      if (e.tiene_anillo) chips.push('Tiene anillo');
+      if (e.tiene_volva) chips.push('Tiene volva');
+      if (e.brilla_oscuridad) chips.push('Bioluminiscente');
+      if (e.es_sensible) chips.push('Especie sensible');
+
+      return { filas, chips, imagen: e.imagen_url || null, descripcion: e.descripcion_completa || null };
+    }
+
+    function fichaAHTML(ficha){
+      let html = '';
+      if (ficha.imagen) {
+        html += `<img class="ficha-imagen" src="${escapeHTML(ficha.imagen)}" alt="Foto de referencia de la especie">`;
+      }
+      if (ficha.filas.length) {
+        html += '<dl class="ficha-filas">' + ficha.filas.map(([k, v]) => `<dt>${escapeHTML(k)}</dt><dd>${escapeHTML(v)}</dd>`).join('') + '</dl>';
+      }
+      if (ficha.chips.length) {
+        html += '<div class="ficha-chips">' + ficha.chips.map(c => `<span class="ficha-etiqueta">${escapeHTML(c)}</span>`).join('') + '</div>';
+      }
+      if (ficha.descripcion) {
+        html += `<p class="ficha-descripcion">${escapeHTML(ficha.descripcion)}</p>`;
+      }
+      return html || '<p class="modal-nota">No hay ficha registrada todavía para esta especie.</p>';
+    }
+
+    async function mostrarTop5(top5Array){
+      const caja = document.getElementById('top5-especie');
+      const cont = document.getElementById('top5-items');
+      caja.hidden = true;
+      cont.innerHTML = '';
+
+      if (!Array.isArray(top5Array) || top5Array.length === 0) return;
+
+      const nombres = top5Array.map(item => nombreLegible(item.especie || ''));
+
+      const datos = await Promise.all(nombres.map(async (nombre) => {
+        if (!nombre.trim()) return null;
+        try {
+          const { data, error } = await sbClient
+            .from('especies')
+            .select(CAMPOS_FICHA_ESPECIE)
+            .ilike('nombre_cientifico', nombre)
+            .maybeSingle();
+          return error ? null : data;
+        } catch (_) {
+          return null;
+        }
+      }));
+
+      const html = top5Array.map((item, i) => {
+        const nombre = nombres[i];
+        const conf = Math.round((Number(item.confianza) || 0) * 1000) / 10;
+        const e = datos[i];
+        const fotoHTML = e && e.imagen_url
+          ? `<img src="${escapeHTML(e.imagen_url)}" alt="">`
+          : `<span class="top5-foto-vacia">🍄</span>`;
+        const nombreComunHTML = e && e.nombre_comun
+          ? `<span class="top5-comun">${escapeHTML(e.nombre_comun)}</span>`
+          : '';
+        const detalleHTML = e ? fichaAHTML(calcularFichaEspecie(e, false)) : fichaAHTML({ filas: [], chips: [], imagen: null, descripcion: null });
+
+        return `
+          <details class="top5-item">
+            <summary>
+              <span class="top5-rank${i === 0 ? ' top5-rank-principal' : ''}">${i + 1}</span>
+              <span class="top5-foto-wrap">${fotoHTML}</span>
+              <span class="top5-info">
+                <span class="top5-nombre">${escapeHTML(nombre)}</span>
+                ${nombreComunHTML}
+              </span>
+              <span class="top5-conf">${conf}%</span>
+            </summary>
+            <div class="top5-detalle">${detalleHTML}</div>
+          </details>`;
+      }).join('');
+
+      cont.innerHTML = html;
+      caja.hidden = false;
+    }
+
     async function mostrarFichaEspecie(nombreCientifico){
       const caja = document.getElementById('ficha-especie');
       const filas = document.getElementById('ficha-filas');
@@ -1419,11 +2070,20 @@ window.__mycocolInit = true;
       try {
         const { data: e, error } = await sbClient
           .from('especies')
-          .select('nombre_comun, familia, genero, forma_sombrero, color_sombrero, tipo_laminas, color_laminas, tipo_pie, diametro_cm, habitat, sustrato, altitud_m, distribucion, tiene_anillo, tiene_volva, color_esporas, brilla_oscuridad, olor, uso_medicinal, descripcion_completa')
+          .select('nombre_comun, orden, familia, genero, forma_sombrero, color_sombrero, tipo_laminas, color_laminas, tipo_pie, diametro_cm, habitat, sustrato, altitud_m, distribucion, tiene_anillo, tiene_volva, color_esporas, brilla_oscuridad, olor, toxicidad, uso_medicinal, descripcion_completa, imagen_url, es_sensible')
           .ilike('nombre_cientifico', nombreCientifico)
           .maybeSingle();
 
         if (error || !e) return; // sin ficha disponible, no pasa nada — el resultado principal ya se ve
+
+        // Foto de referencia de la especie, si la tabla tiene una
+        const imgEl = document.getElementById('ficha-imagen');
+        if (e.imagen_url) {
+          imgEl.src = e.imagen_url;
+          imgEl.hidden = false;
+        } else {
+          imgEl.hidden = true;
+        }
 
         const agregar = (etiqueta, valor) => {
           if (valor === null || valor === undefined || valor === '') return;
@@ -1432,6 +2092,7 @@ window.__mycocolInit = true;
           filas.appendChild(dt); filas.appendChild(dd);
         };
 
+        agregar('Orden', e.orden);
         agregar('Familia', [e.familia, e.genero].filter(Boolean).join(' · '));
         agregar('Sombrero', [e.forma_sombrero, e.color_sombrero].filter(Boolean).join(', '));
         agregar('Láminas', [e.tipo_laminas, e.color_laminas].filter(Boolean).join(', '));
@@ -1442,13 +2103,15 @@ window.__mycocolInit = true;
         agregar('Distribución', e.distribucion);
         agregar('Esporas', e.color_esporas);
         agregar('Olor', e.olor);
+        agregar('Toxicidad', document.getElementById('resultado-toxicidad').hidden ? e.toxicidad : null);
         agregar('Uso medicinal', e.uso_medicinal);
 
-        // Etiquetas destacadas (anillo, volva, bioluminiscencia) como chips en vez de fila
+        // Etiquetas destacadas (anillo, volva, bioluminiscencia, sensible) como chips en vez de fila
         const chips = [];
         if (e.tiene_anillo) chips.push('Tiene anillo');
         if (e.tiene_volva) chips.push('Tiene volva');
         if (e.brilla_oscuridad) chips.push('Bioluminiscente');
+        if (e.es_sensible) chips.push('Especie sensible');
         if (chips.length) {
           const dt = document.createElement('dt'); dt.textContent = '';
           const dd = document.createElement('dd');
@@ -1461,16 +2124,454 @@ window.__mycocolInit = true;
           descripcionEl.hidden = false;
         }
 
-        if (filas.children.length > 0 || !descripcionEl.hidden) {
+        if (filas.children.length > 0 || !descripcionEl.hidden || !imgEl.hidden) {
           caja.hidden = false;
         }
       } catch (err) {
         console.error('[Mycocol] no se pudo cargar la ficha de especie:', err);
       }
     }
+
+  // ========== App Web (panel tras iniciar sesión) ==========
+  // Todo este bloque conecta el HTML/CSS que ya venía armado (sidebar,
+  // dashboard, mapa, etc.) con datos reales de Supabase.
+  let esValidadorCache = false;
+  let appShellUsuarioActivo = null;
+
+  async function activarAppShell(session){
+    document.body.classList.add('mycocol-app-activa');
+    const user = session.user;
+    window.__mycocolCurrentUserId = user.id;
+
+    // Evita repetir todas las consultas cada vez que Supabase renueva el
+    // token (onAuthStateChange dispara seguido) — solo se puebla una vez
+    // por usuario mientras la pestaña sigue abierta.
+    if (appShellUsuarioActivo === user.id) return;
+    appShellUsuarioActivo = user.id;
+
+    let nombreUsuario = user.email || 'Explorador';
+    let nombreCompleto = null;
+
+    try {
+      const { data: perfil } = await sbClient
+        .from('usuarios')
+        .select('nombre_completo, nombre_usuario, bio, avatar_url')
+        .eq('id', user.id)
+        .maybeSingle();
+      if (perfil) {
+        nombreCompleto = perfil.nombre_completo;
+        nombreUsuario = perfil.nombre_usuario || nombreUsuario;
+        aplicarAvatar('app-avatar', perfil.avatar_url);
+        aplicarAvatar('profile-avatar', perfil.avatar_url);
+      }
+    } catch (_) {
+      // Si falla, seguimos con el correo como nombre — no bloquea el resto.
+    }
+
+    const nombreVisible = nombreCompleto || nombreUsuario;
+    const inicial = nombreVisible ? nombreVisible.trim().charAt(0).toUpperCase() : 'M';
+    setTextoSiExiste('app-user-name', nombreVisible);
+    setTextoSiExiste('dashboard-user', nombreVisible);
+    setTextoSiExiste('profile-name', nombreVisible);
+    setTextoSiExiste('profile-username', nombreUsuario, true);
+    setTextoSiExiste('profile-email', user.email || '');
+    setTextoSiExiste('profile-email-input', user.email || '', true);
+    completarInicialSiVacio('app-avatar', inicial);
+    completarInicialSiVacio('profile-avatar', inicial);
+
+    // ¿Es validador? — mismo criterio que validador_gate.dart en la app:
+    // existe una fila propia en la tabla `validadores`.
+    try {
+      const { data: filaValidador } = await sbClient
+        .from('validadores')
+        .select('id')
+        .eq('id', user.id)
+        .maybeSingle();
+      esValidadorCache = !!filaValidador;
+    } catch (_) {
+      esValidadorCache = false;
+    }
+    const navValidacion = document.getElementById('nav-validacion');
+    if (navValidacion) navValidacion.style.display = esValidadorCache ? '' : 'none';
+
+    cargarDashboard(user.id);
+  }
+
+  function desactivarAppShell(){
+    document.body.classList.remove('mycocol-app-activa');
+    document.body.classList.remove('app-sidebar-abierta');
+    appShellUsuarioActivo = null;
+  }
+
+  function setTextoSiExiste(id, valor, esInput){
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (esInput) el.value = valor || ''; else el.textContent = valor || '';
+  }
+
+  function aplicarAvatar(id, url){
+    const el = document.getElementById(id);
+    if (!el || !url) return;
+    el.style.backgroundImage = `url(${url})`;
+    el.style.backgroundSize = 'cover';
+    el.style.backgroundPosition = 'center';
+    el.textContent = '';
+  }
+
+  function completarInicialSiVacio(id, inicial){
+    const el = document.getElementById(id);
+    if (el && !el.style.backgroundImage) el.textContent = inicial;
+  }
+
+  function irAlWizardIdentificar(){
+    desactivarAppShell();
+    document.getElementById('identificar')?.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function irAPaginaApp(pagina){
+    if (pagina === 'identificar') { irAlWizardIdentificar(); return; }
+
+    document.querySelectorAll('.app-page').forEach(p => p.classList.remove('activa'));
+    document.querySelectorAll('#app-nav button[data-page]').forEach(b => {
+      b.classList.toggle('activo', b.dataset.page === pagina);
+    });
+    document.getElementById('app-page-' + pagina)?.classList.add('activa');
+
+    const titulos = {
+      inicio: 'Inicio', observaciones: 'Mis hallazgos', 'explorar-web': 'Explorar',
+      'mapa-web': 'Mapa', 'perfil-web': 'Perfil', 'validacion-web': 'Validación',
+    };
+    setTextoSiExiste('app-page-title', titulos[pagina] || pagina);
+    document.body.classList.remove('app-sidebar-abierta');
+
+    if (pagina === 'observaciones') cargarMisObservaciones();
+    if (pagina === 'validacion-web' && esValidadorCache) cargarColaValidacion();
+  }
+
+  document.getElementById('app-back-landing')?.addEventListener('click', desactivarAppShell);
+  document.getElementById('app-logout')?.addEventListener('click', () => sbClient.auth.signOut());
+  document.getElementById('app-top-profile')?.addEventListener('click', () => irAPaginaApp('perfil-web'));
+  document.getElementById('app-mobile-menu')?.addEventListener('click', () => {
+    document.body.classList.toggle('app-sidebar-abierta');
+  });
+  document.getElementById('app-refresh')?.addEventListener('click', () => {
+    const activa = document.querySelector('.app-page.activa')?.id?.replace('app-page-', '');
+    if (activa) irAPaginaApp(activa);
+  });
+  document.querySelectorAll('#app-nav button[data-page]').forEach(btn => {
+    btn.addEventListener('click', () => irAPaginaApp(btn.dataset.page));
+  });
+  document.querySelectorAll('[data-go]').forEach(btn => {
+    btn.addEventListener('click', () => irAPaginaApp(btn.dataset.go));
+  });
+
+  async function cargarDashboard(uid){
+    try {
+      const [totalRes, validadasRes, propiasRes] = await Promise.all([
+        sbClient.from('observaciones').select('id', { count: 'exact', head: true }).eq('usuario_id', uid),
+        sbClient.from('observaciones').select('id', { count: 'exact', head: true }).eq('usuario_id', uid).eq('validada', true),
+        sbClient.from('observaciones').select('prediccion_top1').eq('usuario_id', uid),
+      ]);
+      setTextoSiExiste('dash-total', totalRes.count ?? 0);
+      setTextoSiExiste('dash-validadas', validadasRes.count ?? 0);
+      const especiesUnicas = new Set((propiasRes.data || []).map(o => o.prediccion_top1).filter(Boolean));
+      setTextoSiExiste('dash-especies', especiesUnicas.size);
+    } catch (e) {
+      console.error('[Mycocol] error cargando métricas del dashboard:', e);
+    }
+
+    try {
+      const { data: recientes, error } = await sbClient
+        .from('observaciones')
+        .select('id, foto_url, prediccion_top1, confianza_prediccion, validada, created_at')
+        .eq('usuario_id', uid)
+        .order('created_at', { ascending: false })
+        .limit(6);
+      if (error) throw error;
+
+      const cont = document.getElementById('dash-observaciones');
+      if (!cont) return;
+      if (!recientes || recientes.length === 0) {
+        cont.innerHTML = '<div class="app-card app-empty"><div class="big">🍄</div>Todavía no tienes observaciones — identifica tu primer hongo.</div>';
+        return;
+      }
+      cont.innerHTML = recientes.map(o => `
+        <div class="app-card app-card-pad">
+          ${o.foto_url ? `<img src="${escapeHTML(o.foto_url)}" alt="" style="width:100%;aspect-ratio:1.3;object-fit:cover;border-radius:10px;margin-bottom:8px;">` : ''}
+          <strong style="display:block;color:var(--texto);font-style:italic;">${escapeHTML(o.prediccion_top1 || 'Sin identificar')}</strong>
+          <span style="color:var(--piedra);font-size:12px;">${o.validada ? '✓ Validada' : 'Pendiente'} · ${Math.round((o.confianza_prediccion || 0) * 100)}%</span>
+        </div>`).join('');
+    } catch (e) {
+      console.error('[Mycocol] error cargando observaciones recientes:', e);
+    }
+  }
+
+  async function cargarMisObservaciones(){
+    const uid = window.__mycocolCurrentUserId;
+    const tbody = document.getElementById('my-observations-table');
+    if (!tbody || !uid) return;
+    tbody.innerHTML = '<tr><td colspan="4" class="app-empty">Cargando…</td></tr>';
+    try {
+      const { data, error } = await sbClient
+        .from('observaciones')
+        .select('prediccion_top1, confianza_prediccion, validada, created_at')
+        .eq('usuario_id', uid)
+        .order('created_at', { ascending: false })
+        .limit(100);
+      if (error) throw error;
+      if (!data || data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="app-empty">Todavía no tienes observaciones.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = data.map(o => `
+        <tr>
+          <td style="font-style:italic;">${escapeHTML(o.prediccion_top1 || 'Sin identificar')}</td>
+          <td>${Math.round((o.confianza_prediccion || 0) * 100)}%</td>
+          <td>${o.validada ? '✓ Validada' : 'Pendiente'}</td>
+          <td>${new Date(o.created_at).toLocaleDateString('es-CO')}</td>
+        </tr>`).join('');
+    } catch (e) {
+      tbody.innerHTML = '<tr><td colspan="4" class="app-empty">No se pudieron cargar tus observaciones.</td></tr>';
+      console.error('[Mycocol] error cargando mis observaciones:', e);
+    }
+  }
+
+  // Explorar especies — buscador simple sobre la tabla `especies`.
+  let temporizadorBusquedaEspecies = null;
+  document.getElementById('species-search')?.addEventListener('input', (e) => {
+    clearTimeout(temporizadorBusquedaEspecies);
+    const q = e.target.value.trim();
+    temporizadorBusquedaEspecies = setTimeout(() => buscarEspecies(q), 350);
+  });
+
+  async function buscarEspecies(q){
+    const grid = document.getElementById('species-grid');
+    const contador = document.getElementById('species-count');
+    if (!grid) return;
+    if (!q) {
+      grid.innerHTML = '<div class="app-card app-empty">Escribe para buscar.</div>';
+      if (contador) contador.textContent = '';
+      return;
+    }
+    grid.innerHTML = '<div class="app-card app-empty">Buscando…</div>';
+    try {
+      const { data, error } = await sbClient
+        .from('especies')
+        .select('nombre_comun, nombre_cientifico, imagen_url')
+        .or(`nombre_cientifico.ilike.%${q}%,nombre_comun.ilike.%${q}%`)
+        .limit(30);
+      if (error) throw error;
+      if (!data || data.length === 0) {
+        grid.innerHTML = '<div class="app-card app-empty">Sin resultados.</div>';
+        if (contador) contador.textContent = '0 resultados';
+        return;
+      }
+      if (contador) contador.textContent = `${data.length} resultado${data.length === 1 ? '' : 's'}`;
+      grid.innerHTML = data.map(e => `
+        <div class="app-card app-card-pad">
+          ${e.imagen_url ? `<img src="${escapeHTML(e.imagen_url)}" alt="" style="width:100%;aspect-ratio:1.5;object-fit:cover;border-radius:10px;margin-bottom:8px;">` : ''}
+          <strong style="display:block;color:var(--texto);font-style:italic;">${escapeHTML(e.nombre_cientifico)}</strong>
+          ${e.nombre_comun ? `<span style="display:block;color:var(--piedra);font-size:12.5px;">${escapeHTML(e.nombre_comun)}</span>` : ''}
+        </div>`).join('');
+    } catch (e2) {
+      grid.innerHTML = '<div class="app-card app-empty">No se pudo buscar. Intenta de nuevo.</div>';
+      console.error('[Mycocol] error buscando especies:', e2);
+    }
+  }
+
+  // Cola de validación — de solo lectura por ahora. Confirmar/corregir la
+  // especie es un desarrollo aparte que toca el mismo flujo delicado de
+  // `validacion_screen.dart`; aquí ya se puede revisar la observación y
+  // su predicción, priorizando las de menor confianza.
+  async function cargarColaValidacion(){
+    const cont = document.getElementById('validator-queue');
+    if (!cont) return;
+    cont.innerHTML = '<div class="app-empty">Cargando cola…</div>';
+    try {
+      const { data, error } = await sbClient
+        .from('observaciones')
+        .select('id, foto_url, prediccion_top1, confianza_prediccion, created_at')
+        .eq('validada', false)
+        .order('confianza_prediccion', { ascending: true })
+        .limit(50);
+      if (error) throw error;
+      if (!data || data.length === 0) {
+        cont.innerHTML = '<div class="app-empty"><div class="big">✅</div>No hay observaciones pendientes por revisar.</div>';
+        return;
+      }
+      cont.innerHTML = data.map(o => `
+        <div class="app-queue-item" data-queue-id="${escapeHTML(o.id)}" style="display:flex; gap:10px; align-items:center; padding:10px; border-bottom:1px solid var(--borde); cursor:pointer;">
+          ${o.foto_url ? `<img src="${escapeHTML(o.foto_url)}" style="width:44px;height:44px;object-fit:cover;border-radius:8px;flex-shrink:0;" alt="">` : ''}
+          <div style="min-width:0;">
+            <strong style="display:block; font-style:italic; color:var(--texto); font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHTML(o.prediccion_top1 || 'Sin identificar')}</strong>
+            <span style="font-size:11.5px; color:var(--piedra);">${Math.round((o.confianza_prediccion || 0) * 100)}% de confianza</span>
+          </div>
+        </div>`).join('');
+      cont.querySelectorAll('[data-queue-id]').forEach(el => {
+        el.addEventListener('click', () => {
+          const item = data.find(o => o.id === el.dataset.queueId);
+          mostrarDetalleValidacion(item);
+        });
+      });
+    } catch (e) {
+      cont.innerHTML = '<div class="app-empty">No se pudo cargar la cola.</div>';
+      console.error('[Mycocol] error cargando cola de validación:', e);
+    }
+  }
+
+  function mostrarDetalleValidacion(o){
+    const det = document.getElementById('validator-detail');
+    if (!det || !o) return;
+    det.innerHTML = `
+      ${o.foto_url ? `<img class="big-photo" src="${escapeHTML(o.foto_url)}" alt="">` : ''}
+      <div class="app-eyebrow" style="margin-top:12px;">Predicción de Karol IA</div>
+      <strong style="display:block;color:var(--texto);font:500 20px Fraunces,serif;font-style:italic;margin:6px 0;">${escapeHTML(o.prediccion_top1 || 'Sin identificar')}</strong>
+      <div style="color:var(--piedra);font-size:12.5px;">${Math.round((o.confianza_prediccion || 0) * 100)}% de confianza · ${new Date(o.created_at).toLocaleDateString('es-CO')}</div>
+      <div class="app-note" style="margin-top:14px;">La confirmación/corrección de especies todavía no está conectada — por ahora esta vista es de solo consulta.</div>`;
+  }
   }
 })();
 }
+</script>
+
+<script id="mycocol-map-js">
+(function(){
+  const state={items:[],filter:'all',selected:null,scale:1};
+  const sb=window.__mycocolSupabaseClient || window.supabase?.createClient?.(
+    "https://bsjdvgjgvrgdrgoziatj.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhdXRoZW50aWNhdGlvbiIsInN1cCI6ImFub24iLCJpYXQiOjE3ODI3NjI3NTAsImV4cCI6MjA5ODMzODc1MH0.Grqy48k0BbLtZO0jMKJ86s8bIGQbRpf4k6y22T7TP2k"
+  );
+
+  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function activePage(){return document.getElementById('app-page-mapa-web')?.classList.contains('activa');}
+
+  async function load(){
+    if(!sb)return;
+    const list=document.getElementById('web-map-obs-list');
+    try{
+      // Seleccionamos solo columnas que ya forman parte del modelo de observaciones.
+      // La coordenada pública se toma de latitud/longitud; el backend puede ocultarla
+      // o redondearla en el futuro para observaciones sensibles.
+      const {data,error}=await sb.from('observaciones')
+        .select('id,prediccion_top1,confianza_prediccion,validada,created_at,foto_url,latitud,longitud,usuario_id')
+        .eq('validada',true)
+        .not('latitud','is',null)
+        .not('longitud','is',null)
+        .order('created_at',{ascending:false})
+        .limit(200);
+      if(error)throw error;
+
+      state.items=(data||[]).map((x,i)=>({
+        ...x,
+        lat:Number(x.latitud),lng:Number(x.longitud),
+        // Posición visual: usamos coordenadas reales para determinar el punto,
+        // normalizándolas dentro del área de Colombia/Bogotá como referencia.
+        // En la siguiente etapa esto puede sustituirse por Leaflet/Mapbox sin cambiar
+        // el panel ni el modelo de datos.
+        x: mapX(Number(x.longitud)), y: mapY(Number(x.latitud)),
+        sensitive: false
+      }));
+      render();
+    }catch(e){
+      console.warn('[Mycocol map]',e);
+      list.innerHTML='<div class="app-empty"><div class="big">🗺️</div>No pudimos cargar el mapa de observaciones.</div>';
+    }
+  }
+
+  function mapX(lng){
+    // Ventana geográfica amplia de Colombia, con margen.
+    const min=-79.2,max=-66.8;
+    return Math.max(4,Math.min(96,(lng-min)/(max-min)*100));
+  }
+  function mapY(lat){
+    // Latitud invertida para pantalla.
+    const min=-4.3,max=12.7;
+    return Math.max(5,Math.min(95,(1-(lat-min)/(max-min))*100));
+  }
+
+  function filtered(){
+    const q=(document.getElementById('web-map-search-input')?.value||'').trim().toLowerCase();
+    return state.items.filter(x=>{
+      if(state.filter==='validated'&&!x.validada)return false;
+      if(state.filter==='sensitive'&&!x.sensitive)return false;
+      if(state.filter==='mine'&&x.usuario_id!==window.__mycocolCurrentUserId)return false;
+      if(q && !String(x.prediccion_top1||'').toLowerCase().includes(q))return false;
+      return true;
+    });
+  }
+
+  function render(){
+    const items=filtered();
+    const pins=document.getElementById('web-map-pins');
+    const list=document.getElementById('web-map-obs-list');
+    document.getElementById('web-map-count').textContent=items.length;
+    pins.innerHTML=items.map((o,i)=>`
+      <button class="web-map-pin-real ${o.sensitive?'sensible':''} ${state.selected===o.id?'selected':''}"
+        style="left:${o.x}%;top:${o.y}%"
+        data-pin="${esc(o.id)}" title="${esc(o.prediccion_top1||'Sin identificar')}"></button>
+    `).join('');
+
+    list.innerHTML=items.length?items.slice(0,60).map(o=>`
+      <div class="web-map-obs ${state.selected===o.id?'selected':''}" data-obs="${esc(o.id)}">
+        <strong>${esc(o.prediccion_top1||'Sin identificar')}</strong>
+        <span>${o.validada?'✓ Validada':'Pendiente'} · ${Math.round(Number(o.confianza_prediccion||0)*100)}% · ${new Date(o.created_at).toLocaleDateString('es-CO')}</span>
+      </div>
+    `).join(''):'<div class="app-empty">No hay registros con este filtro.</div>';
+
+    pins.querySelectorAll('[data-pin]').forEach(b=>b.onclick=()=>select(b.dataset.pin));
+    list.querySelectorAll('[data-obs]').forEach(b=>b.onclick=()=>select(b.dataset.obs));
+  }
+
+  function select(id){
+    state.selected=id;
+    const o=state.items.find(x=>x.id===id);if(!o)return;
+    render();
+    const d=document.getElementById('web-map-detail');d.hidden=false;
+    d.innerHTML=`
+      ${o.foto_url?`<img src="${esc(o.foto_url)}" alt="">`:''}
+      <div class="app-eyebrow">Observación</div>
+      <strong style="display:block;color:var(--texto);font:500 18px Fraunces,serif;font-style:italic;margin:5px 0">${esc(o.prediccion_top1||'Sin identificar')}</strong>
+      <div style="color:var(--piedra);font-size:11px">${o.validada?'✓ Validada':'◷ Pendiente'} · ${new Date(o.created_at).toLocaleDateString('es-CO')}</div>
+      <div class="app-actions" style="margin-top:12px"><button class="app-btn" id="map-detail-close">Cerrar</button></div>`;
+    document.getElementById('map-detail-close').onclick=()=>{d.hidden=true;state.selected=null;render();};
+  }
+
+  function zoom(delta){
+    state.scale=Math.max(.8,Math.min(2,state.scale+delta));
+    const c=document.getElementById('mycocol-map-canvas');
+    c.style.backgroundSize=`${100*state.scale}px ${70*state.scale}px`;
+    toastMap(`Zoom ${Math.round(state.scale*100)}%`);
+  }
+  function toastMap(msg){
+    const t=document.getElementById('app-toast');if(!t)return;t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1200);
+  }
+
+  document.getElementById('web-map-plus')?.addEventListener('click',()=>zoom(.15));
+  document.getElementById('web-map-minus')?.addEventListener('click',()=>zoom(-.15));
+  document.getElementById('web-map-locate')?.addEventListener('click',()=>{
+    if(!navigator.geolocation){toastMap('Tu navegador no soporta ubicación.');return;}
+    navigator.geolocation.getCurrentPosition(pos=>{
+      const you=document.getElementById('web-map-you');
+      you.style.left=mapX(pos.coords.longitude)+'%';you.style.top=mapY(pos.coords.latitude)+'%';you.style.display='block';
+      toastMap('Ubicación aproximada mostrada.');
+    },()=>toastMap('No se pudo obtener tu ubicación.'));
+  });
+  document.getElementById('web-map-search-input')?.addEventListener('input',()=>render());
+  document.querySelectorAll('[data-map-filter]').forEach(b=>b.addEventListener('click',()=>{
+    state.filter=b.dataset.mapFilter;
+    document.querySelectorAll('[data-map-filter]').forEach(x=>x.classList.toggle('active',x===b));
+    render();
+  }));
+
+  // Exponer para que la navegación de la app lo refresque al entrar.
+  window.__mycocolLoadMap=load;
+  const oldGo=window.goPage;
+  // El script principal usa una función privada; observamos el DOM para cargar
+  // cuando la sección se hace visible.
+  new MutationObserver(()=>{
+    if(activePage() && !state.items.length)load();
+  }).observe(document.getElementById('app-page-mapa-web'),{attributes:true,attributeFilter:['class']});
+})();
 </script>
 
 </body>
